@@ -55,6 +55,13 @@ app.controller('motogpCtrl', function($scope, $http, $mdToast) {
   		function success(response) {
   			console.log("success " + response.data)
   			$scope.races = response.data
+  			for (var i=0; i<$scope.races.length; i++) {
+					var race = $scope.races[i]
+					var qualifying_start_time_str = moment(race["qualifying_start_time"]).format("dddd, MMMM Do, h:mm a");
+					var race_start_time_str = moment(race["race_start_time"]).format("dddd, MMMM Do, h:mm a");
+					race["qualifying_start_time_str"] = qualifying_start_time_str
+					race["race_start_time_str"] = race_start_time_str
+				}
   		},
   		function error(response) {
   			console.log("error")

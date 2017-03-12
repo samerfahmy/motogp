@@ -16,6 +16,9 @@
   <!-- Angular Material Library -->
   <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
 
+  <!-- Moment Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+
   <script src="motogp.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -59,8 +62,12 @@
 		Enter your predictions below. Races that are finished show the results to the right.
 	</p>
 
-	<div ng-repeat="race in races">
-		<h4>{{race.location}}</h4>
+	<div ng-repeat="race in races" md-whiteframe="1" layout-padding>
+		<span class="md-title">{{race.location}}</span>
+		<br>
+		<span class="md-caption">Qualifying on {{race.qualifying_start_time_str}}</span>
+		<br>
+		<span class="md-caption">Race on {{race.race_start_time_str}}</span>
 		<table>
 			<tr>
 				<td class="md-caption">Pole</td>
@@ -107,25 +114,7 @@
 		    </td>
     	</tr>
     </table>
-    <md-divider ng-if="!$last"></md-divider>
-
-    <!--First Position: 
-		<select name="riderSelect" ng-model="race.selected_race_pos_1" ng-disabled="checkExpired(race.race_start_time)">
-      <option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</option>
-    </select>
-    	{{race.race_pos_1}}
-    <br>
-    Second Position: 
-		<select name="riderSelect" ng-model="race.selected_race_pos_2" ng-disabled="checkExpired(race.race_start_time)">
-      <option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</option>
-    </select>
-    	{{race.race_pos_2}}
-    <br>
-    Third Position: 
-		<select name="riderSelect" ng-model="race.selected_race_pos_3" ng-disabled="checkExpired(race.race_start_time)">
-      <option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</option>
-    </select>
-    	{{race.race_pos_3}}-->
+    <!-- <md-divider ng-if="!$last"></md-divider> -->
 	</div>
 
 	<br>
