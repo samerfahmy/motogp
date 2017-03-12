@@ -7,7 +7,8 @@ var RiderSchema = new mongoose.Schema({
     index: true
   },
   team: String,
-  manufacturer: String
+  manufacturer: String,
+  number: String
 });
 
 var Rider = mongoose.model('Rider', RiderSchema);

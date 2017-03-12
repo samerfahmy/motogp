@@ -2,7 +2,10 @@ var mongoose = require("mongoose");
 
 var RaceSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  location: String,
+  location: {
+    type: String,
+    index: true
+  },
   qualifying_start_time: {
     type: Date,
     index: true

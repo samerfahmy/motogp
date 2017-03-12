@@ -66,7 +66,7 @@
 				<td class="md-caption">Pole</td>
 				<td>
 					<md-select name="riderSelect" ng-model="race.selected_pole" ng-disabled="checkExpired(race.qualifying_start_time)">
-			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</md-option>
+			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' (' + option.number + ')'}}</md-option>
 			    </md-select>
 		    </td>
 		    <td class="md-caption" ng-class="{green: race.pole === race.selected_pole, red: race.pole != race.selected_pole}">
@@ -77,7 +77,7 @@
 				<td class="md-caption">First</td>
 				<td>
 					<md-select name="riderSelect" ng-model="race.selected_race_pos_1" ng-disabled="checkExpired(race.race_start_time)">
-			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</md-option>
+			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' (' + option.number + ')'}}</md-option>
 			    </md-select>
 		    </td>
 		    <td class="md-caption" ng-class="{green: race.race_pos_1 === race.selected_race_pos_1, red: race.race_pos_1 != race.selected_race_pos_1}">
@@ -88,7 +88,7 @@
 				<td class="md-caption">Second</td>
 				<td>
 					<md-select name="riderSelect" ng-model="race.selected_race_pos_2" ng-disabled="checkExpired(race.race_start_time)">
-			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</md-option>
+			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' (' + option.number + ')'}}</md-option>
 			    </md-select>
 		    </td>
 		    <td class="md-caption" ng-class="{green: race.race_pos_2 === race.selected_race_pos_2, red: race.race_pos_2 != race.selected_race_pos_2}">
@@ -99,7 +99,7 @@
 				<td class="md-caption">Third</td>
 				<td>
 					<md-select name="riderSelect" ng-model="race.selected_race_pos_3" ng-disabled="checkExpired(race.race_start_time)">
-			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</md-option>
+			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' (' + option.number + ')'}}</md-option>
 			    </md-select>
 		    </td>
 		    <td class="md-caption" ng-class="{green: race.race_pos_3 === race.selected_race_pos_3, red: race.race_pos_3 != race.selected_race_pos_3}">

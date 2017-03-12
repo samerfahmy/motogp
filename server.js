@@ -38,7 +38,20 @@ mongoose.connect(DATABASE);
 /* Status check endpoint */
 router.route("/api/_status").get(function(req,res){
   var response = {}
-  res.json(response)
+  var statusCode = 200
+
+  var User = require("./models/user").User
+
+  User.findOne({},function(err,data){
+    // Mongo command to fetch all data from collection.
+    if (err) {
+        response = {"message" : "DB Error"}
+        statusCode = 500
+    }
+
+    res.statusCode = statusCode
+    res.json(response)
+  });
 });
 
 router.route("/api/login").post(function(req,res){
