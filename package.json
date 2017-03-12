@@ -1,0 +1,21 @@
+{
+  "name": "motogp",
+  "version": "1.0.0",
+  "description": "MotoGP Prediction Game",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "start_prod": "cross-env NODE_ENV=production PORT=3000 npm start"
+  },
+  "author": "Samer Fahmy",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "body-parser": "^1.13.3",
+    "mongoose": "^4.1.2"
+  },
+  "devDependencies": {
+    "cross-env": "^3.2.3"
+  }
+}

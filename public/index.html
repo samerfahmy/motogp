@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script> -->
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+
+  <!-- Angular Material Library -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+  <script src="motogp.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div ng-app="motogpApp" ng-controller="motogpCtrl" ng-cloak>
+<md-content layout-padding flex>
+
+<md-content layout="column" id="login" ng-show="!loggedIn">
+	<!-- <p>Email: <input type="text" ng-model="username"></p>
+	<p>Password: <input type="password" ng-model="password"></p> -->
+
+	<center>
+		<h2>Welcome to the MotoGP Predictor!</h2>
+
+		<p>Please sign in</p>
+	</center>
+	
+	<md-input-container>
+    <label>Email</label>
+    <input ng-model="username" type="text">
+  </md-input-container>
+  <md-input-container>
+    <label>Password</label>
+    <input ng-model="password" type="password">
+  </md-input-container>
+
+	<md-button class="md-raised md-primary" ng-click="login()">Sign in</md-button>
+	<center>
+		<p class="md-caption">
+			Email <a href="mailto:samerf@gmail.com">samerf@gmail.com</a> to create an account.
+		</p>
+	</center>
+</md-content>
+
+<div id="data" ng-show="loggedIn">
+	<h2>Welcome {{user.name}}!</h2>
+
+	<p>
+		Enter your predictions below. Races that are finished show the results to the right.
+	</p>
+
+	<div ng-repeat="race in races">
+		<h4>{{race.location}}</h4>
+		<table>
+			<tr>
+				<td class="md-caption">Pole</td>
+				<td>
+					<md-select name="riderSelect" ng-model="race.selected_pole" ng-disabled="checkExpired(race.qualifying_start_time)">
+			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</md-option>
+			    </md-select>
+		    </td>
+		    <td class="md-caption" ng-class="{green: race.pole === race.selected_pole, red: race.pole != race.selected_pole}">
+		    	{{race.pole}}
+		    </td>
+    	</tr>
+    	<tr>
+				<td class="md-caption">First</td>
+				<td>
+					<md-select name="riderSelect" ng-model="race.selected_race_pos_1" ng-disabled="checkExpired(race.race_start_time)">
+			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</md-option>
+			    </md-select>
+		    </td>
+		    <td class="md-caption" ng-class="{green: race.race_pos_1 === race.selected_race_pos_1, red: race.race_pos_1 != race.selected_race_pos_1}">
+		    	{{race.race_pos_1}}
+		    </td>
+    	</tr>
+    	<tr>
+				<td class="md-caption">Second</td>
+				<td>
+					<md-select name="riderSelect" ng-model="race.selected_race_pos_2" ng-disabled="checkExpired(race.race_start_time)">
+			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</md-option>
+			    </md-select>
+		    </td>
+		    <td class="md-caption" ng-class="{green: race.race_pos_2 === race.selected_race_pos_2, red: race.race_pos_2 != race.selected_race_pos_2}">
+		    	{{race.race_pos_2}}
+		    </td>
+    	</tr>
+    	<tr>
+				<td class="md-caption">Third</td>
+				<td>
+					<md-select name="riderSelect" ng-model="race.selected_race_pos_3" ng-disabled="checkExpired(race.race_start_time)">
+			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</md-option>
+			    </md-select>
+		    </td>
+		    <td class="md-caption" ng-class="{green: race.race_pos_3 === race.selected_race_pos_3, red: race.race_pos_3 != race.selected_race_pos_3}">
+		    	{{race.race_pos_3}}
+		    </td>
+    	</tr>
+    </table>
+    <md-divider ng-if="!$last"></md-divider>
+
+    <!--First Position: 
+		<select name="riderSelect" ng-model="race.selected_race_pos_1" ng-disabled="checkExpired(race.race_start_time)">
+      <option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</option>
+    </select>
+    	{{race.race_pos_1}}
+    <br>
+    Second Position: 
+		<select name="riderSelect" ng-model="race.selected_race_pos_2" ng-disabled="checkExpired(race.race_start_time)">
+      <option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</option>
+    </select>
+    	{{race.race_pos_2}}
+    <br>
+    Third Position: 
+		<select name="riderSelect" ng-model="race.selected_race_pos_3" ng-disabled="checkExpired(race.race_start_time)">
+      <option ng-repeat="option in riders" value="{{option.name}}">{{option.name}}</option>
+    </select>
+    	{{race.race_pos_3}}-->
+	</div>
+
+	<br>
+
+	<div layout="row" layout-align="center center">
+		<md-button class="md-raised md-primary" ng-click="postPredictions()">Post Predictions</md-button>
+	</div>
+
+</div>
+
+</md-content>
+</div>
+
+</body>
+</html>
