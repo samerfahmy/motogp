@@ -29,8 +29,13 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   	return srcDate <= Date.now()
   }
 
-  $scope.showScoreDialog = function(ev, data) {
-  	$scope.scoreDialogElement = data
+  $scope.showScoreDialog = function(ev, user_name, race_location, prediction, results) {
+  	$scope.scoreDialogElement = {
+      user_name : user_name,
+      race_location : race_location,
+      prediction : prediction,
+      results : results
+    };
   	$mdDialog.show({
       contentElement: '#scoreDialog',
       parent: angular.element(document.body),

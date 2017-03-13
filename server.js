@@ -217,102 +217,106 @@ router.route("/api/scores").get(function(req,res){
     var users = results.users
     var predictions = results.predictions
     var races = results.races
-    var racesArray = []
 
+    var processed_race_results = {};
+    var race_list = [];
+    var now = new Date();
     for (var i=0; i<races.length; i++) {
+      var race = races[i];
 
-      var race = races[i]
+      var race_data = {
+        race_id : race._id,
+        location: race.location,
+        pole : race.pole,
+        race_pos_1 : race.race_pos_1,
+        race_pos_2 : race.race_pos_2,
+        race_pos_3 : race.race_pos_3,
+        qualification_completed : race.pole != null,
+        qualification_started : race.qualifying_start_time < now,
+        race_completed : race.race_pos_1 != null,
+        race_started : race.race_start_time < now
+      };        
 
-      var usersArray = []
-      var predictionsArray = []
+      processed_race_results[race._id] = race_data;
+      race_list.push(race_data);
+    }
 
-      for (var j=0; j<users.length; j++) {
-        var user = users[j]
-
-        var userPrediction = {
-          pole: null,
-          race_pos_1: null,
-          race_pos_2: null,
-          race_pos_3: null,
+    var processed_users = {};
+    for (var i=0; i<users.length; i++) {
+        var user = users[i];
+        processed_users[user._id] = {
+          total : 0,
+          name : user.name,
+          races : {}
         }
-        var score = 0
-        var raceComplete = false
+    }
 
-        for (var k=0; k<predictions.length; k++) {
-          var prediction = predictions[k]
+    for (var i=0; i<predictions.length; i++) {
+      var prediction = predictions[i]
 
-          if (prediction.user_id === user._id) {
-            userPrediction = prediction
-            break;
-          }
-        } // predictions
+      var race_id = prediction.race_id;
+      var user_id = prediction.user_id;
+      var race_result = processed_race_results[race_id];
+      if (race_result) {
+        var calculated_score = 0;
 
-        // calculate the score
-        if (race.pole && race.race_pos_1) {
-          raceComplete = true
-
-          if (race.pole === userPrediction.pole) {
-            score = score + 1
-          }
-
-          if (userPrediction.race_pos_1 === race.race_pos_1 || userPrediction.race_pos_1 === race.race_pos_2 || userPrediction.race_pos_1 === race.race_pos_3) {
-            score = score + 1
-          }
-
-          if (userPrediction.race_pos_1 === race.race_pos_1) {
-            score = score + 1
-          }
-
-          if (userPrediction.race_pos_2 === race.race_pos_1 || userPrediction.race_pos_2 === race.race_pos_2 || userPrediction.race_pos_2 === race.race_pos_3) {
-            score = score + 1
-          }
-
-          if (userPrediction.race_pos_2 === race.race_pos_2) {
-            score = score + 1
-          }
-
-          if (userPrediction.race_pos_2 === race.race_pos_1 || userPrediction.race_pos_3 === race.race_pos_2 || userPrediction.race_pos_3 === race.race_pos_3) {
-            score = score + 1
-          }
-
-          if (userPrediction.race_pos_3 === race.race_pos_3) {
-            score = score + 1
-          }
-
+        prediction_data = {}
+        
+        if (race_result.qualification_started) {
+          prediction_data.pole = prediction.pole;
         }
 
-        var predictionObject = {
-          user: user.name,
-          location: race.location,
-          race_id: race._id,
-          prediction: {
-            pole: userPrediction.pole,
-            race_pos_1: userPrediction.race_pos_1,
-            race_pos_2: userPrediction.race_pos_2,
-            race_pos_3: userPrediction.race_pos_3
-          },
-          results: {
-            pole: race.pole,
-            race_pos_1: race.race_pos_1,
-            race_pos_2: race.race_pos_2,
-            race_pos_3: race.race_pos_3
-          },
-          score: score,
-          race_complete: raceComplete
+        if (race_result.qualification_completed) {
+          calculated_score += race_result.pole == prediction.pole ? 1 : 0;
         }
 
-        predictionsArray.push(predictionObject)
-        usersArray.push(user.name)
+        if (race_result.race_started) {
+          prediction_data.race_pos_1 = prediction.race_pos_1;
+          prediction_data.race_pos_2 = prediction.race_pos_2;
+          prediction_data.race_pos_3 = prediction.race_pos_3;
+        }
 
-      } // users
+        if (race_result.race_completed) {
+          var winners = {};
+          winners[race_result.race_pos_1] = true;
+          winners[race_result.race_pos_2] = true;
+          winners[race_result.race_pos_3] = true;
 
-      response[race.location] = predictionsArray
-      racesArray.push(race.location)
+          if (winners[prediction.race_pos_1]) {
+            calculated_score += prediction.race_pos_1 == race_result.race_pos_1 ? 2 : 1;
+          }
 
-    } // races
+          if (winners[prediction.race_pos_2]) {
+            calculated_score += prediction.race_pos_2 == race_result.race_pos_2 ? 2 : 1;
+          }
 
-    response.users = usersArray
-    response.races = racesArray
+          if (winners[prediction.race_pos_3]) {
+            calculated_score += prediction.race_pos_3 == race_result.race_pos_3 ? 2 : 1;
+          }
+        }
+
+        prediction_data.score = calculated_score;
+
+        processed_users[user_id].races[race_id] = prediction_data;
+        processed_users[user_id].total += calculated_score;
+      }
+    }
+
+    var sorted_user_id_tuples = Object.keys(processed_users).map(function(key) {
+        return [key, processed_users[key].total];
+    });
+    sorted_user_id_tuples.sort(function(first, second) {
+        return second[1] - first[1];
+    });
+
+    var sorted_user_ids = [];
+    for (var i = 0; i < sorted_user_id_tuples.length; i++) {
+      sorted_user_ids.push(sorted_user_id_tuples[i][0]);
+    }
+
+    response.user_ids = sorted_user_ids;
+    response.user_data = processed_users;
+    response.races = race_list;
 
     res.json(response)
 

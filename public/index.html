@@ -203,11 +203,15 @@
 
 <tr>
 	<td></td>
-	<td ng-repeat="user in scores.users">{{user}}</td>
+	<td ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].name}}</td>
+<tr>
+<tr>
+    <td>Total</td>
+    <td ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].total}}</td>
 <tr>
 <tr ng-repeat="race in scores.races">
-	<td>{{race}}</td>
-	<td ng-repeat="score in scores[race]" ng-click="showScoreDialog($event, score)">{{score.score}}</td>
+	<td>{{race.location}}</td>
+	<td ng-repeat="user_id in scores.user_ids" ng-click="showScoreDialog($event, scores.user_data[user_id].name, race.location, scores.user_data[user_id].races[race.race_id], race)">{{scores.user_data[user_id].races[race.race_id] ? scores.user_data[user_id].races[race.race_id].score : 0}}</td>
 </tr>
 
 </table>
@@ -215,9 +219,9 @@
 <div style="visibility: hidden">
   <div class="md-dialog-container" id="scoreDialog">
     <md-dialog layout-padding>
-	    <span class="md-title">{{scoreDialogElement.user}}</span>
+	    <span class="md-title">{{scoreDialogElement.user_name}}</span>
 			<br>
-			<span class="md-caption">{{scoreDialogElement.location}}</span>
+			<span class="md-caption">{{scoreDialogElement.race_location}}</span>
       <p>
       	<span>Predictions</span><br>
       	<span>Pole - {{scoreDialogElement.prediction.pole}}</span><br>
