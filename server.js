@@ -132,7 +132,7 @@ router.route("/api/users/:user_id/predictions").get(function(req,res){
 
   query.exec(function(err,data) {
     // Mongo command to fetch all data from collection.
-    if (err || data === null || data.length === 0) {
+    if (err) {
         response = {"message" : "Error occured"}
         res.statusCode = 400
         res.json(response)

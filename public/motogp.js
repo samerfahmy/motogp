@@ -1,9 +1,11 @@
 var app = angular.module('motogpApp', ['ngMaterial', 'ngCookies']);
 
-app.config(function($mdThemingProvider, $mdIconProvider){
+app.config(function($mdThemingProvider, $mdAriaProvider){
     $mdThemingProvider.theme('default')
         .primaryPalette('deep-orange')
         .accentPalette('brown')
+
+    $mdAriaProvider.disableWarnings();
 });
 
 app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cookies', function($scope, $http, $mdToast, $mdDialog, $cookies) {
