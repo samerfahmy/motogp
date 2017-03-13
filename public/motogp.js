@@ -193,8 +193,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   						 predictions,
   						 null).then(
   		function success(response) {
-  			console.log("success posting predictions" + response.data)
-
   			$mdToast.show(
 		      $mdToast.simple()
 		        .textContent('Success!')
@@ -203,7 +201,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
 		    );
   		},
   		function error(response) {
-  			console.log("error")
   	});
   }
 
