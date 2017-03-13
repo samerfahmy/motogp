@@ -75,9 +75,9 @@
 			<tr>
 				<td class="md-caption">Pole</td>
 				<td>
-					<select name="riderSelect" ng-model="predictionRace.selected_pole" ng-disabled="checkExpired(predictionRace.qualifying_start_time)">
-			      <option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' (' + option.number + ')'}}</option>
-			    </select>
+					<md-select name="riderSelect" ng-model="predictionRace.selected_pole" ng-disabled="checkExpired(predictionRace.qualifying_start_time)">
+			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' (' + option.number + ')'}}</md-option>
+			    </md-select>
 		    </td>
 		    <td class="md-caption" ng-class="{green: predictionRace.pole === predictionRace.selected_pole, red: predictionRace.pole != predictionRace.selected_pole}">
 		    	{{predictionRace.pole}}

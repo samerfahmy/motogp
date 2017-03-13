@@ -234,7 +234,12 @@ router.route("/api/scores").get(function(req,res){
       for (var j=0; j<users.length; j++) {
         var user = users[j]
 
-        var userPrediction = null
+        var userPrediction = {
+          pole: null,
+          race_pos_1: null,
+          race_pos_2: null,
+          race_pos_3: null,
+        }
         var score = 0
         var raceComplete = false
 
@@ -251,31 +256,31 @@ router.route("/api/scores").get(function(req,res){
         if (race.pole && race.race_pos_1) {
           raceComplete = true
 
-          if (race.pole === prediction.pole) {
+          if (race.pole === userPrediction.pole) {
             score = score + 1
           }
 
-          if (prediction.race_pos_1 === race.race_pos_1 || prediction.race_pos_1 === race.race_pos_2 || prediction.race_pos_1 === race.race_pos_3) {
+          if (userPrediction.race_pos_1 === race.race_pos_1 || userPrediction.race_pos_1 === race.race_pos_2 || userPrediction.race_pos_1 === race.race_pos_3) {
             score = score + 1
           }
 
-          if (prediction.race_pos_1 === race.race_pos_1) {
+          if (userPrediction.race_pos_1 === race.race_pos_1) {
             score = score + 1
           }
 
-          if (prediction.race_pos_2 === race.race_pos_1 || prediction.race_pos_2 === race.race_pos_2 || prediction.race_pos_2 === race.race_pos_3) {
+          if (userPrediction.race_pos_2 === race.race_pos_1 || userPrediction.race_pos_2 === race.race_pos_2 || userPrediction.race_pos_2 === race.race_pos_3) {
             score = score + 1
           }
 
-          if (prediction.race_pos_2 === race.race_pos_2) {
+          if (userPrediction.race_pos_2 === race.race_pos_2) {
             score = score + 1
           }
 
-          if (prediction.race_pos_2 === race.race_pos_1 || prediction.race_pos_3 === race.race_pos_2 || prediction.race_pos_3 === race.race_pos_3) {
+          if (userPrediction.race_pos_2 === race.race_pos_1 || userPrediction.race_pos_3 === race.race_pos_2 || userPrediction.race_pos_3 === race.race_pos_3) {
             score = score + 1
           }
 
-          if (prediction.race_pos_3 === race.race_pos_3) {
+          if (userPrediction.race_pos_3 === race.race_pos_3) {
             score = score + 1
           }
 
@@ -286,10 +291,10 @@ router.route("/api/scores").get(function(req,res){
           location: race.location,
           race_id: race._id,
           prediction: {
-            pole: prediction.pole,
-            race_pos_1: prediction.race_pos_1,
-            race_pos_2: prediction.race_pos_2,
-            race_pos_3: prediction.race_pos_3
+            pole: userPrediction.pole,
+            race_pos_1: userPrediction.race_pos_1,
+            race_pos_2: userPrediction.race_pos_2,
+            race_pos_3: userPrediction.race_pos_3
           },
           results: {
             pole: race.pole,
