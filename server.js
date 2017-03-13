@@ -154,8 +154,6 @@ router.route("/api/users/:user_id/race/:race_id/predictions").get(function(req,r
 
   var predictions = req.body
 
-  console.log("Predictions: " + predictions.length)
-
   var query = Prediction.findOne({"user_id":userId, "race_id":raceId})
 
   query.exec(function(err,data) {
@@ -181,19 +179,16 @@ router.route("/api/users/:user_id/predictions").post(function(req,res){
 
   var predictions = req.body
 
-  console.log("Predictions: " + predictions.length)
-
   for (var i=0; i<predictions.length; i++) {
 
     var prediction = predictions[i]
-
-    console.log("Prediction: " + prediction)
 
     var raceId = mongoose.Types.ObjectId(prediction.race_id)
 
     Prediction.findOneAndUpdate({"user_id":userId, "race_id":raceId}, prediction, {upsert:true}, function(err, doc){
         if (err) {
-          console.log("Error! " + err)
+          res.statusCode = 500
+          response = err
         }
     });
   }
