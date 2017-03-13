@@ -204,7 +204,7 @@ router.route("/api/scores").get(function(req,res){
 
   async.parallel({
     races: function(cb){
-      Race.find({}, cb);
+      Race.find({}, cb).sort({race_start_time:1});
     },
     predictions: function(cb){
       Prediction.find({}, cb);
@@ -213,6 +213,18 @@ router.route("/api/scores").get(function(req,res){
       User.find({test:{"$ne":true}}, cb);
     }
   }, function(err, results){
+
+    hash = function(srcData) {
+      var data = srcData.toString();
+      var hash = 0, i, chr;
+      if (data.length === 0) return hash;
+      for (i = 0; i < data.length; i++) {
+        chr   = data.charCodeAt(i);
+        hash  = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+      }
+      return hash;
+    };
 
     var users = results.users
     var predictions = results.predictions
@@ -244,7 +256,8 @@ router.route("/api/scores").get(function(req,res){
     var processed_users = {};
     for (var i=0; i<users.length; i++) {
         var user = users[i];
-        processed_users[user._id] = {
+        user.hashed_id = hash(user._id);
+        processed_users[user.hashed_id] = {
           total : 0,
           name : user.name,
           races : {}
@@ -255,7 +268,7 @@ router.route("/api/scores").get(function(req,res){
       var prediction = predictions[i]
 
       var race_id = prediction.race_id;
-      var user_id = prediction.user_id;
+      var user_id = hash(prediction.user_id);
       var race_result = processed_race_results[race_id];
       if (race_result) {
         var calculated_score = 0;
@@ -297,8 +310,10 @@ router.route("/api/scores").get(function(req,res){
 
         prediction_data.score = calculated_score;
 
-        processed_users[user_id].races[race_id] = prediction_data;
-        processed_users[user_id].total += calculated_score;
+        if (processed_users[user_id]) {
+          processed_users[user_id].races[race_id] = prediction_data;
+          processed_users[user_id].total += calculated_score;
+        }
       }
     }
 
