@@ -40,9 +40,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   }
 
   $scope.login = function() {
-  	console.log("Username: " + $scope.username)
-  	console.log("Password: " + $scope.password)
-
   	$http.post('/api/login',
   						 {
   						 	username: $scope.username,
@@ -50,7 +47,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   						 },
   						 null).then(
   		function success(response) {
-  			console.log("success " + response.data)
   			$scope.user = response.data
 
   			$cookies.put('user_id', response.data._id)
@@ -61,8 +57,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   			$scope.getData()
   		},
   		function error(response) {
-  			console.log("error")
-
   			$mdToast.show(
 		      $mdToast.simple()
 		        .textContent('Error signing in')
@@ -79,7 +73,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   						 null,
   						 null).then(
   		function success(response) {
-  			console.log("success " + response.data)
   			$scope.races = response.data
   			for (var i=0; i<$scope.races.length; i++) {
 					var race = $scope.races[i]
@@ -94,7 +87,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
 				}
   		},
   		function error(response) {
-  			console.log("error")
   	});
 
   	// Get all the riders
@@ -102,11 +94,9 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   						 null,
   						 null).then(
   		function success(response) {
-  			console.log("success " + response.data)
   			$scope.riders = response.data
   		},
   		function error(response) {
-  			console.log("error")
   	});
 
   	// Get all predictions for the user
@@ -114,7 +104,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   						 null,
   						 null).then(
   		function success(response) {
-  			console.log("success " + response.data)
   			var predictions = response.data
   			for (var i=0; i<predictions.length; i++) {
   				var prediction = predictions[i]
@@ -136,7 +125,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   			}
   		},
   		function error(response) {
-  			console.log("error")
   	});
 
 		// Get all the results
@@ -144,11 +132,9 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   						 null,
   						 null).then(
   		function success(response) {
-  			console.log("success " + response.data)
   			$scope.scores = response.data
   		},
   		function error(response) {
-  			console.log("error")
   	});
   }
 
