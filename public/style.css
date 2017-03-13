@@ -17,3 +17,36 @@ td {
 .race-box {
 	margin-bottom: 12px;
 }
+
+table.score-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.score-table, table.score-table th, table.score-table td {
+  border: 1px solid #888888;
+  border-collapse: collapse;
+  padding: 5px;
+}
+
+table.score-table td.race-location-column {
+  width: 190px;
+}
+
+table.score-table td.name-column {
+  width: 70px;
+}
+
+table.score-table tr:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+
+table.score-table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+table.score-table tr.total-row {
+  background-color: #094918;
+  color: #ffffff;
+  font-weight: bold;
+}

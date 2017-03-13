@@ -198,47 +198,45 @@
 </md-content>
 </md-tab>
 <md-tab label="Scores">
+    <md-content layout-padding>
+        <table class="score-table">
+            <tr>
+            	<td class="race-location-column"></td>
+            	<td class="name-column" ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].name}}</td>
+            <tr>
+            <tr class="total-row">
+                <td>Total</td>
+                <td ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].total}}</td>
+            <tr>
+            <tr ng-repeat="race in scores.races">
+            	<td>{{race.location}}</td>
+            	<td ng-repeat="user_id in scores.user_ids" ng-click="showScoreDialog($event, scores.user_data[user_id].name, race.location, scores.user_data[user_id].races[race.race_id], race)">{{scores.user_data[user_id].races[race.race_id] ? scores.user_data[user_id].races[race.race_id].score : 0}}</td>
+            </tr>
+        </table>
 
-<table>
-
-<tr>
-	<td></td>
-	<td ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].name}}</td>
-<tr>
-<tr>
-    <td>Total</td>
-    <td ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].total}}</td>
-<tr>
-<tr ng-repeat="race in scores.races">
-	<td>{{race.location}}</td>
-	<td ng-repeat="user_id in scores.user_ids" ng-click="showScoreDialog($event, scores.user_data[user_id].name, race.location, scores.user_data[user_id].races[race.race_id], race)">{{scores.user_data[user_id].races[race.race_id] ? scores.user_data[user_id].races[race.race_id].score : 0}}</td>
-</tr>
-
-</table>
-
-<div style="visibility: hidden">
-  <div class="md-dialog-container" id="scoreDialog">
-    <md-dialog layout-padding>
-	    <span class="md-title">{{scoreDialogElement.user_name}}</span>
-			<br>
-			<span class="md-caption">{{scoreDialogElement.race_location}}</span>
-      <p>
-      	<span>Predictions</span><br>
-      	<span>Pole - {{scoreDialogElement.prediction.pole}}</span><br>
-      	<span>1st - {{scoreDialogElement.prediction.race_pos_1}}</span><br>
-      	<span>2nd - {{scoreDialogElement.prediction.race_pos_2}}</span><br>
-      	<span>3rd - {{scoreDialogElement.prediction.race_pos_3}}</span><br>
-      	<br>
-      	<span>Actual</span><br>
-      	<span>Pole - {{scoreDialogElement.results.pole}}</span><br>
-      	<span>1st - {{scoreDialogElement.results.race_pos_1}}</span><br>
-      	<span>2nd - {{scoreDialogElement.results.race_pos_2}}</span><br>
-      	<span>3rd - {{scoreDialogElement.results.race_pos_3}}</span><br>
-      </p>
-    </md-dialog>
-  </div>
-</div>
-
+        <div style="visibility: hidden">
+          <div class="md-dialog-container" id="scoreDialog">
+            <md-dialog layout-padding>
+        	    <span class="md-title">{{scoreDialogElement.user_name}}</span>
+        			<br>
+        			<span class="md-caption">{{scoreDialogElement.race_location}}</span>
+              <p>
+              	<span>Predictions</span><br>
+              	<span>Pole - {{scoreDialogElement.prediction.pole}}</span><br>
+              	<span>1st - {{scoreDialogElement.prediction.race_pos_1}}</span><br>
+              	<span>2nd - {{scoreDialogElement.prediction.race_pos_2}}</span><br>
+              	<span>3rd - {{scoreDialogElement.prediction.race_pos_3}}</span><br>
+              	<br>
+              	<span>Actual</span><br>
+              	<span>Pole - {{scoreDialogElement.results.pole}}</span><br>
+              	<span>1st - {{scoreDialogElement.results.race_pos_1}}</span><br>
+              	<span>2nd - {{scoreDialogElement.results.race_pos_2}}</span><br>
+              	<span>3rd - {{scoreDialogElement.results.race_pos_3}}</span><br>
+              </p>
+            </md-dialog>
+          </div>
+        </div>
+    </md-content>
 </md-tab>
 </md-tabs>
 </div>
