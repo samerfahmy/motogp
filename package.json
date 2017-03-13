@@ -11,8 +11,9 @@
   "author": "Samer Fahmy",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.15.2",
+    "async": "^2.1.5",
     "body-parser": "^1.13.3",
+    "express": "^4.15.2",
     "mongoose": "^4.1.2"
   },
   "devDependencies": {

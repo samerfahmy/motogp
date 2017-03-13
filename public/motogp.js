@@ -1,20 +1,40 @@
-var app = angular.module('motogpApp', ['ngMaterial']);
+var app = angular.module('motogpApp', ['ngMaterial', 'ngCookies']);
 
-app.controller('motogpCtrl', function($scope, $http, $mdToast) {
+app.config(function($mdThemingProvider, $mdIconProvider){
+    $mdThemingProvider.theme('default')
+        .primaryPalette('deep-orange')
+        .accentPalette('brown')
+});
 
-  $scope.user = null
+app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cookies', function($scope, $http, $mdToast, $mdDialog, $cookies) {
+
+  $scope.user = {
+  	_id : $cookies.get('user_id'),
+  	name : $cookies.get('user_name')
+  }
   $scope.races = null
   $scope.riders = null
   $scope.loggedIn = false
+  $scope.initialized = false
 
+  $scope.predictionRace = null
+
+  $scope.scoreDialogElement = null
 
   $scope.checkExpired = function(date) {
-  	console.log("Date1: " + date)
-  	console.log("Date2: " + Date.now())
-
   	var srcDate = Date.parse(date)
   	
   	return srcDate <= Date.now()
+  }
+
+  $scope.showScoreDialog = function(ev, data) {
+  	$scope.scoreDialogElement = data
+  	$mdDialog.show({
+      contentElement: '#scoreDialog',
+      parent: angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose: true
+    });
   }
 
   $scope.login = function() {
@@ -30,6 +50,10 @@ app.controller('motogpCtrl', function($scope, $http, $mdToast) {
   		function success(response) {
   			console.log("success " + response.data)
   			$scope.user = response.data
+
+  			$cookies.put('user_id', response.data._id)
+  			$cookies.put('user_name', response.data.name)
+
   			$scope.loggedIn = true
 
   			$scope.getData()
@@ -61,6 +85,10 @@ app.controller('motogpCtrl', function($scope, $http, $mdToast) {
 					var race_start_time_str = moment(race["race_start_time"]).format("dddd, MMMM Do, h:mm a");
 					race["qualifying_start_time_str"] = qualifying_start_time_str
 					race["race_start_time_str"] = race_start_time_str
+
+					if ($scope.predictionRace == null && (!$scope.checkExpired(race["qualifying_start_time"]) || !$scope.checkExpired(race["race_start_time"]))) {
+						$scope.predictionRace = race
+					}
 				}
   		},
   		function error(response) {
@@ -96,9 +124,26 @@ app.controller('motogpCtrl', function($scope, $http, $mdToast) {
   						race["selected_race_pos_1"] = prediction["race_pos_1"]
   						race["selected_race_pos_2"] = prediction["race_pos_2"]
   						race["selected_race_pos_3"] = prediction["race_pos_3"]
+
+  						var predictionRace = $scope.predictionRace
+  						if (race["_id"] === predictionRace["_id"]) {
+  							$scope.predictionRace = race
+  						}
   					}
   				}
   			}
+  		},
+  		function error(response) {
+  			console.log("error")
+  	});
+
+		// Get all the results
+  	$http.get('/api/scores',
+  						 null,
+  						 null).then(
+  		function success(response) {
+  			console.log("success " + response.data)
+  			$scope.scores = response.data
   		},
   		function error(response) {
   			console.log("error")
@@ -109,34 +154,52 @@ app.controller('motogpCtrl', function($scope, $http, $mdToast) {
 
   	var predictions = []
 
-  	for (var i=0; i<$scope.races.length; i++) {
-  		var race = $scope.races[i]
-  		var raceId = race._id
-  		var qualifyingStartTime = race.qualifying_start_time
-  		var raceStartTime = race.race_start_time
-  		var pole = race.selected_pole
-  		var racePos1 = race.selected_race_pos_1
-  		var racePos2 = race.selected_race_pos_2
-  		var racePos3 = race.selected_race_pos_3
+  	// for (var i=0; i<$scope.races.length; i++) {
+  	// 	var race = $scope.races[i]
+  	// 	var raceId = race._id
+  	// 	var qualifyingStartTime = race.qualifying_start_time
+  	// 	var raceStartTime = race.race_start_time
+  	// 	var pole = race.selected_pole
+  	// 	var racePos1 = race.selected_race_pos_1
+  	// 	var racePos2 = race.selected_race_pos_2
+  	// 	var racePos3 = race.selected_race_pos_3
 
-  		var prediction = {}
+  	// 	var prediction = {}
 
-  		prediction.race_id = raceId
+  	// 	prediction.race_id = raceId
 
-  		if (!$scope.checkExpired(qualifyingStartTime)) {
-  			prediction.pole = pole
-  			prediction.entry_time = Date.now()
-  		}
+  	// 	if (!$scope.checkExpired(qualifyingStartTime)) {
+  	// 		prediction.pole = pole
+  	// 		prediction.entry_time = Date.now()
+  	// 	}
 
-  		if (!$scope.checkExpired(raceStartTime)) {
-  			prediction.race_pos_1 = racePos1
-  			prediction.race_pos_2 = racePos2
-  			prediction.race_pos_3 = racePos3
-  			prediction.entry_time = Date.now()
-  		}
+  	// 	if (!$scope.checkExpired(raceStartTime)) {
+  	// 		prediction.race_pos_1 = racePos1
+  	// 		prediction.race_pos_2 = racePos2
+  	// 		prediction.race_pos_3 = racePos3
+  	// 		prediction.entry_time = Date.now()
+  	// 	}
 
-  		predictions.push(prediction)
-  	}
+  	// 	predictions.push(prediction)
+  	// }
+
+		var prediction = {}
+
+		prediction.race_id = $scope.predictionRace._id
+
+		if (!$scope.checkExpired(prediction["qualifying_start_time"])) {
+			prediction.pole = $scope.predictionRace.selected_pole
+			prediction.entry_time = Date.now()
+		}
+
+		if (!$scope.checkExpired(prediction["race_start_time"])) {
+			prediction.race_pos_1 = $scope.predictionRace.selected_race_pos_1
+			prediction.race_pos_2 = $scope.predictionRace.selected_race_pos_2
+			prediction.race_pos_3 = $scope.predictionRace.selected_race_pos_3
+			prediction.entry_time = Date.now()
+		}
+
+		predictions.push(prediction)
 
   	$http.post('/api/users/' + $scope.user._id + '/predictions',
   						 predictions,
@@ -154,7 +217,15 @@ app.controller('motogpCtrl', function($scope, $http, $mdToast) {
   		function error(response) {
   			console.log("error")
   	});
-
   }
 
-});
+  $scope.init = function() {
+  	if ($scope.user._id && $scope.user.name) {
+	  	$scope.loggedIn = true
+
+	  	$scope.getData()
+	  }
+	  $scope.initialized = true
+	}
+
+}]);
