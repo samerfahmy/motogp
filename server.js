@@ -125,10 +125,9 @@ router.route("/api/users/:user_id/predictions").get(function(req,res){
   var response = {}
   var Prediction = require("./models/prediction").Prediction
 
-  //var userId = mongoose.Types.ObjectId(req.params.user_id)
+  var userId = mongoose.Types.ObjectId(req.params.user_id)
 
-  //var query = Prediction.find({"user_id":userId})
-  var query = Prediction.find({})
+  var query = Prediction.find({"user_id":userId})
 
   query.exec(function(err,data) {
     // Mongo command to fetch all data from collection.
