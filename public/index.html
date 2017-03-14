@@ -137,8 +137,7 @@
 		</p>
 	</center>
 
-	<!-- <div ng-repeat="race in races" md-whiteframe="1" layout-padding class="race-box" ng-show="checkExpired(race.qualifying_start_time) && checkExpired(race.race_start_time)"> -->
-	<div ng-repeat="race in races" md-whiteframe="1" layout-padding class="race-box">
+	<div ng-repeat="race in races" md-whiteframe="1" layout-padding class="race-box" ng-show="checkExpired(race.qualifying_start_time) && checkExpired(race.race_start_time)">
 		<span class="md-title">{{race.location}}</span>
 		<br>
 		<span class="md-caption">Qualifying on {{race.qualifying_start_time_str}}</span>
