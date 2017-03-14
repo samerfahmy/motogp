@@ -72,8 +72,7 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   }
 
   $scope.getData = function() {
-  	
-  	// Get all the races
+    // Get all the races
   	$http.get('/api/races',
   						 null,
   						 null).then(
@@ -90,6 +89,8 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
 						$scope.predictionRace = race
 					}
 				}
+
+        $scope.getPredictions();
   		},
   		function error(response) {
   	});
@@ -100,34 +101,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   						 null).then(
   		function success(response) {
   			$scope.riders = response.data
-  		},
-  		function error(response) {
-  	});
-
-  	// Get all predictions for the user
-  	$http.get('/api/users/' + $scope.user._id + '/predictions',
-  						 null,
-  						 null).then(
-  		function success(response) {
-  			var predictions = response.data
-  			for (var i=0; i<predictions.length; i++) {
-  				var prediction = predictions[i]
-
-  				for (var j=0; j<$scope.races.length; j++) {
-  					var race = $scope.races[j]
-  					if (race["_id"] === prediction["race_id"]) {
-  						race["selected_pole"] = prediction["pole"]
-  						race["selected_race_pos_1"] = prediction["race_pos_1"]
-  						race["selected_race_pos_2"] = prediction["race_pos_2"]
-  						race["selected_race_pos_3"] = prediction["race_pos_3"]
-
-  						var predictionRace = $scope.predictionRace
-  						if (race["_id"] === predictionRace["_id"]) {
-  							$scope.predictionRace = race
-  						}
-  					}
-  				}
-  			}
   		},
   		function error(response) {
   	});
@@ -143,39 +116,62 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   	});
   }
 
+  $scope.getPredictions = function() {
+    // Get all predictions for the user
+    $http.get('/api/users/' + $scope.user._id + '/predictions',
+               null,
+               null).then(
+      function success(response) {
+        var predictions = response.data
+        for (var i=0; i<predictions.length; i++) {
+          var prediction = predictions[i]
+
+          for (var j=0; j<$scope.races.length; j++) {
+            var race = $scope.races[j]
+            if (race["_id"] === prediction["race_id"]) {
+              race["selected_pole"] = prediction["pole"]
+              race["selected_race_pos_1"] = prediction["race_pos_1"]
+              race["selected_race_pos_2"] = prediction["race_pos_2"]
+              race["selected_race_pos_3"] = prediction["race_pos_3"]
+
+              var predictionRace = $scope.predictionRace
+              if (race["_id"] === predictionRace["_id"]) {
+                $scope.predictionRace = race
+              }
+            }
+          }
+        }
+      },
+      function error(response) {
+    });
+  }
+
   $scope.postPredictions = function() {
 
+    // verify the inputs first
+    var selectionsArray = []
+    selectionsArray[0] = $scope.predictionRace.selected_race_pos_1
+    selectionsArray[1] = $scope.predictionRace.selected_race_pos_2
+    selectionsArray[2] = $scope.predictionRace.selected_race_pos_3
+
+    for (var i=0; i<selectionsArray.length; i++) {
+      for (var j=0; j<selectionsArray.length; j++) {
+        if (i != j && selectionsArray[i] == selectionsArray[j]) {
+          // duplicate selection, return an error
+          $mdDialog.show(
+            $mdDialog.alert()
+              .parent(angular.element(document.body))
+              .clickOutsideToClose(true)
+              .title('Error')
+              .textContent('You\'ve picked ' + selectionsArray[i] + ' more than once.')
+              .ok('OK')
+          );
+          return;
+        }
+      }
+    }
+
   	var predictions = []
-
-  	// for (var i=0; i<$scope.races.length; i++) {
-  	// 	var race = $scope.races[i]
-  	// 	var raceId = race._id
-  	// 	var qualifyingStartTime = race.qualifying_start_time
-  	// 	var raceStartTime = race.race_start_time
-  	// 	var pole = race.selected_pole
-  	// 	var racePos1 = race.selected_race_pos_1
-  	// 	var racePos2 = race.selected_race_pos_2
-  	// 	var racePos3 = race.selected_race_pos_3
-
-  	// 	var prediction = {}
-
-  	// 	prediction.race_id = raceId
-
-  	// 	if (!$scope.checkExpired(qualifyingStartTime)) {
-  	// 		prediction.pole = pole
-  	// 		prediction.entry_time = Date.now()
-  	// 	}
-
-  	// 	if (!$scope.checkExpired(raceStartTime)) {
-  	// 		prediction.race_pos_1 = racePos1
-  	// 		prediction.race_pos_2 = racePos2
-  	// 		prediction.race_pos_3 = racePos3
-  	// 		prediction.entry_time = Date.now()
-  	// 	}
-
-  	// 	predictions.push(prediction)
-  	// }
-
 		var prediction = {}
 
 		prediction.race_id = $scope.predictionRace._id
@@ -206,6 +202,14 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
 		    );
   		},
   		function error(response) {
+        $mdDialog.show(
+          $mdDialog.alert()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title('Error')
+            .textContent('Please try to post your results again.')
+            .ok('OK')
+        );
   	});
   }
 

@@ -179,6 +179,8 @@ router.route("/api/users/:user_id/predictions").post(function(req,res){
 
   var predictions = req.body
 
+  var totalProcessed = 0
+
   for (var i=0; i<predictions.length; i++) {
 
     var prediction = predictions[i]
@@ -190,10 +192,16 @@ router.route("/api/users/:user_id/predictions").post(function(req,res){
           res.statusCode = 500
           response = err
         }
+
+        // Because of the async nature of the DB calls, we will send the response when
+        // all have been processed
+        totalProcessed++
+
+        if (totalProcessed == predictions.length) {
+          res.json(response)
+        }
     });
   }
-
-  res.json(response)
 });
 
 router.route("/api/scores").get(function(req,res){
