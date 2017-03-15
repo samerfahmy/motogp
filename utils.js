@@ -12,7 +12,7 @@ module.exports = {
 
     for (var i=0; i<selectionsArray.length; i++) {
       for (var j=0; j<selectionsArray.length; j++) {
-        if (i != j && selectionsArray[i] == selectionsArray[j]) {
+        if (i != j && selectionsArray[i] === selectionsArray[j] && selectionsArray[i] != null) {
           // duplicate selection, return an error
           return true;
         }
