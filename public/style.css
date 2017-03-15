@@ -1,5 +1,6 @@
 md-select {
 	margin: 0px;
+  min-width: 166px;
 }
 
 td {
