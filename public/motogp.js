@@ -6,6 +6,11 @@ app.config(function($mdThemingProvider, $mdAriaProvider){
         .accentPalette('blue')
 
     $mdAriaProvider.disableWarnings();
+
+    // Enable browser color
+    $mdThemingProvider.enableBrowserColor({
+      palette: 'accent'
+    });
 });
 
 app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cookies', function($scope, $http, $mdToast, $mdDialog, $cookies) {
