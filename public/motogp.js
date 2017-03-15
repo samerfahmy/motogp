@@ -3,7 +3,7 @@ var app = angular.module('motogpApp', ['ngMaterial', 'ngCookies']);
 app.config(function($mdThemingProvider, $mdAriaProvider){
     $mdThemingProvider.theme('default')
         .primaryPalette('deep-orange')
-        .accentPalette('brown')
+        .accentPalette('blue')
 
     $mdAriaProvider.disableWarnings();
 });
@@ -62,12 +62,14 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   			$scope.getData()
   		},
   		function error(response) {
-  			$mdToast.show(
-		      $mdToast.simple()
-		        .textContent('Error signing in')
-		        .position('top')
-		        .hideDelay(1000)
-		    );
+  			$mdDialog.show(
+          $mdDialog.alert()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title('Error signing in!')
+            .textContent('Please check your password and try again.')
+            .ok('OK')
+        );
   	});
   }
 

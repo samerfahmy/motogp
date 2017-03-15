@@ -173,6 +173,8 @@ router.route("/api/users/:user_id/race/:race_id/predictions").get(function(req,r
 router.route("/api/users/:user_id/predictions").post(function(req,res){
   var response = {}
   var Prediction = require("./models/prediction").Prediction
+  var Race = require("./models/race").Race
+  var Utils = require("./utils")
 
   var userId = mongoose.Types.ObjectId(req.params.user_id)
 
@@ -184,9 +186,44 @@ router.route("/api/users/:user_id/predictions").post(function(req,res){
 
     var prediction = predictions[i]
 
+    // verify the inputs first
+    if (Utils.checkPredictionForDuplicates(prediction)) {
+      res.statusCode = 400
+      totalProcessed++;
+      if (totalProcessed == predictions.length) {
+        res.json(response)
+      }
+      continue;
+    }
+
     var raceId = mongoose.Types.ObjectId(prediction.race_id)
 
-    Prediction.findOneAndUpdate({"user_id":userId, "race_id":raceId}, prediction, {upsert:true}, function(err, doc){
+    Race.findOne({"_id":raceId}, function(err, race) {
+
+      if (err || race === null || race.length === 0 ) {
+        res.statusCode = 500
+        totalProcessed++;
+        if (totalProcessed == predictions.length) {
+          res.json(response)
+        }
+        return;
+      }
+
+      var sanitizedPrediction = {}
+
+      if (!Utils.checkExpired(race.qualifying_start_time)) {
+        sanitizedPrediction.pole = prediction.pole
+        sanitizedPrediction.entry_time = Date.now()
+      }
+
+      if (!Utils.checkExpired(race.race_start_time)) {
+        sanitizedPrediction.race_pos_1 = prediction.race_pos_1
+        sanitizedPrediction.race_pos_2 = prediction.race_pos_2
+        sanitizedPrediction.race_pos_3 = prediction.race_pos_3
+        sanitizedPrediction.entry_time = Date.now()
+      }
+
+      Prediction.findOneAndUpdate({"user_id":userId, "race_id":raceId}, sanitizedPrediction, {upsert:true}, function(err, data){
         if (err) {
           res.statusCode = 500
           response = err
@@ -199,7 +236,9 @@ router.route("/api/users/:user_id/predictions").post(function(req,res){
         if (totalProcessed == predictions.length) {
           res.json(response)
         }
-    });
+      });
+
+    })
   }
 });
 
