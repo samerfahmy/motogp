@@ -6,9 +6,9 @@ module.exports = {
 	 */
 	checkPredictionForDuplicates: function(prediction) {
 		var selectionsArray = []
-    selectionsArray[0] = prediction.race_pos_1
-    selectionsArray[1] = prediction.race_pos_2
-    selectionsArray[2] = prediction.race_pos_3
+    selectionsArray[0] = this.checkForEmpty(prediction.race_pos_1)
+    selectionsArray[1] = this.checkForEmpty(prediction.race_pos_2)
+    selectionsArray[2] = this.checkForEmpty(prediction.race_pos_3)
 
     for (var i=0; i<selectionsArray.length; i++) {
       for (var j=0; j<selectionsArray.length; j++) {
@@ -29,6 +29,13 @@ module.exports = {
   	var srcDate = Date.parse(date)
   	
   	return srcDate <= Date.now()
+  },
+
+  checkForEmpty: function(src) {
+    if (src != null && src.trim().length === 0) {
+      return null
+    }
+    return src
   }
 	
 }

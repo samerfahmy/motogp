@@ -34,6 +34,13 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   	return srcDate <= Date.now()
   }
 
+  $scope.checkForEmpty = function(src) {
+    if (src != null && src.trim().length === 0) {
+      return null
+    }
+    return src
+  }
+
   $scope.showScoreDialog = function(ev, user_name, race_location, prediction, results) {
   	$scope.scoreDialogElement = {
       user_name : user_name,
@@ -155,11 +162,13 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
 
   $scope.postPredictions = function() {
 
+    $scope.postingPredictions = true;
+
     // verify the inputs first
     var selectionsArray = []
-    selectionsArray[0] = $scope.predictionRace.selected_race_pos_1
-    selectionsArray[1] = $scope.predictionRace.selected_race_pos_2
-    selectionsArray[2] = $scope.predictionRace.selected_race_pos_3
+    selectionsArray[0] = $scope.checkForEmpty($scope.predictionRace.selected_race_pos_1)
+    selectionsArray[1] = $scope.checkForEmpty($scope.predictionRace.selected_race_pos_2)
+    selectionsArray[2] = $scope.checkForEmpty($scope.predictionRace.selected_race_pos_3)
 
     for (var i=0; i<selectionsArray.length; i++) {
       for (var j=0; j<selectionsArray.length; j++) {
@@ -173,6 +182,7 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
               .textContent('You\'ve picked ' + selectionsArray[i] + ' more than once.')
               .ok('OK')
           );
+          $scope.postingPredictions = false;
           return;
         }
       }
@@ -183,15 +193,15 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
 
 		prediction.race_id = $scope.predictionRace._id
 
-		if (!$scope.checkExpired(prediction["qualifying_start_time"])) {
-			prediction.pole = $scope.predictionRace.selected_pole
+		if ($scope.predictionRace.selected_pole && !$scope.checkExpired(prediction["qualifying_start_time"])) {
+			prediction.pole = $scope.checkForEmpty($scope.predictionRace.selected_pole)
 			prediction.entry_time = Date.now()
 		}
 
 		if (!$scope.checkExpired(prediction["race_start_time"])) {
-			prediction.race_pos_1 = $scope.predictionRace.selected_race_pos_1
-			prediction.race_pos_2 = $scope.predictionRace.selected_race_pos_2
-			prediction.race_pos_3 = $scope.predictionRace.selected_race_pos_3
+			prediction.race_pos_1 = $scope.checkForEmpty($scope.predictionRace.selected_race_pos_1)
+			prediction.race_pos_2 = $scope.checkForEmpty($scope.predictionRace.selected_race_pos_2)
+			prediction.race_pos_3 = $scope.checkForEmpty($scope.predictionRace.selected_race_pos_3)
 			prediction.entry_time = Date.now()
 		}
 
@@ -201,12 +211,15 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   						 predictions,
   						 null).then(
   		function success(response) {
-  			$mdToast.show(
-		      $mdToast.simple()
-		        .textContent('Success!')
-		        .position('top')
-		        .hideDelay(1000)
-		    );
+  			$mdDialog.show(
+          $mdDialog.alert()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title('Success!')
+            .textContent('Your predictions have been posted. Good luck!')
+            .ok('OK')
+        );
+        $scope.postingPredictions = false;
   		},
   		function error(response) {
         $mdDialog.show(
@@ -217,6 +230,7 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
             .textContent('Please try to post your results again.')
             .ok('OK')
         );
+        $scope.postingPredictions = false;
   	});
   }
 

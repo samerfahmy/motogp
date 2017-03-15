@@ -212,14 +212,14 @@ router.route("/api/users/:user_id/predictions").post(function(req,res){
       var sanitizedPrediction = {}
 
       if (!Utils.checkExpired(race.qualifying_start_time)) {
-        sanitizedPrediction.pole = prediction.pole
+        sanitizedPrediction.pole = Utils.checkForEmpty(prediction.pole)
         sanitizedPrediction.entry_time = Date.now()
       }
 
       if (!Utils.checkExpired(race.race_start_time)) {
-        sanitizedPrediction.race_pos_1 = prediction.race_pos_1
-        sanitizedPrediction.race_pos_2 = prediction.race_pos_2
-        sanitizedPrediction.race_pos_3 = prediction.race_pos_3
+        sanitizedPrediction.race_pos_1 = Utils.checkForEmpty(prediction.race_pos_1)
+        sanitizedPrediction.race_pos_2 = Utils.checkForEmpty(prediction.race_pos_2)
+        sanitizedPrediction.race_pos_3 = Utils.checkForEmpty(prediction.race_pos_3)
         sanitizedPrediction.entry_time = Date.now()
       }
 
