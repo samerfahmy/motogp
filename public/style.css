@@ -46,7 +46,7 @@ table.score-table tr:nth-child(even) {
 }
 
 table.score-table tr.total-row {
-  background-color: #094918;
+  background-color: #689F38;
   color: #ffffff;
   font-weight: bold;
 }
