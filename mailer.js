@@ -43,7 +43,7 @@ function sendRaceReminderEmail(recipient, raceName) {
 }
  
 // Cron task every 60 minutes
-var task = cron.schedule('*/60 * * * *', function() {
+var task = cron.schedule('*/1 * * * *', function() {
 
 	var Race = require("./models/race").Race
   var Prediction = require("./models/prediction").Prediction
@@ -68,7 +68,7 @@ var task = cron.schedule('*/60 * * * *', function() {
 
   	Prediction.find({race_id:raceId}, function(err, predictions) {
 
-  		if (err || predictions === null || predictions.length == 0) {
+  		if (err) {
 	  		return;
 	  	}
 
@@ -76,32 +76,33 @@ var task = cron.schedule('*/60 * * * *', function() {
 	  	var raceUsers = {}
 	  	var ignoredUsers = {}
 
-	  	for (var i=0; i<predictions.length; i++) {
+	  	if (predictions) {
+		  	for (var i=0; i<predictions.length; i++) {
 
-	  		var prediction = predictions[i];
+		  		var prediction = predictions[i];
+	
+			  	if (Date.parse(qualifying_start_time) > Date.now()) {
 
-		  	if (Date.parse(qualifying_start_time) > Date.now()) {
+			  		if ((!prediction.pole || prediction.pole === null || prediction.pole.trim().length() === 0) && !prediction.qualifing_reminder) {
+			  			qualifyingUsers[prediction.user_id] = true;
+			  		} else {
+			  			ignoredUsers[prediction.user_id] = true;
+			  		}
 
-		  		if ((prediction.pole === null || prediction.trim().length() === 0) && !prediction.qualifing_reminder) {
-		  			qualifyingUsers[prediction.user_id] = true;
-		  		} else {
-		  			ignoredUsers[prediction.user_id] = true;
-		  		}
+			  	} else if (Date.now() - Date.parse(qualifying_start_time) > 21600000) {
 
-		  	} else if (Date.now() - Date.parse(qualifying_start_time) > 21600000) {
-
-		  		if ((prediction.pole === null || prediction.pole.trim().length() === 0
-		  				 || prediction.race_pos_1 === null || prediction.race_pos_1.trim().length() === 0
-		  				 || prediction.race_pos_2 === null || prediction.race_pos_2.trim().length() === 0
-		  				 || prediction.race_pos_3 === null || prediction.race_pos_3.trim().length() === 0
-		  			)
-		  		 && !prediction.qualifing_reminder) {
-		  		 	raceUsers[prediction.user_id] = true;
-		  		} else {
-		  			ignoredUsers[prediction.user_id] = true;
-		  		}
-		  	}
-		  }
+			  		if ((!prediction.race_pos_1 || prediction.race_pos_1 === null || prediction.race_pos_1.trim().length() === 0
+			  				 || !prediction.race_pos_2 || prediction.race_pos_2 === null || prediction.race_pos_2.trim().length() === 0
+			  				 || !prediction.race_pos_3 || prediction.race_pos_3 === null || prediction.race_pos_3.trim().length() === 0
+			  			)
+			  		 && !prediction.race_reminder) {
+			  		 	raceUsers[prediction.user_id] = true;
+			  		} else {
+			  			ignoredUsers[prediction.user_id] = true;
+			  		}
+			  	}
+			  }
+			}
 
   		User.find({}, function(err, users) {
 
@@ -121,7 +122,7 @@ var task = cron.schedule('*/60 * * * *', function() {
 
 	  			if (qualifyingUsers[user._id]) {
 	  				sendQualifyingReminderEmail(email, race.location);
-	  			} else if (raceUsers[user._id]) {
+	  			} else {
 	  				sendRaceReminderEmail(email, race.location);
 	  			}
 
@@ -132,7 +133,7 @@ var task = cron.schedule('*/60 * * * *', function() {
 
 	  			var userId = mongoose.Types.ObjectId(user._id)
 
-	  			Prediction.findOneAndUpdate({"user_id":userId, "race_id":raceId}, savedPrediction, {upsert:false}, function(err, data) {
+	  			Prediction.findOneAndUpdate({"user_id":userId, "race_id":raceId}, savedPrediction, {upsert:true}, function(err, data) {
 		      });
 	  		}
 
