@@ -119,16 +119,20 @@ var task = cron.schedule('*/60 * * * *', function() {
   				}
 
 	  			var email = user.username;
+	  			var sentQualifyingEmail = false;
+	  			var sentRaceEmail = false;
 
-	  			if (qualifyingUsers[user._id]) {
+	  			if (qualifyingUsers[user._id] || Date.parse(race.qualifying_start_time) > Date.now()) {
 	  				sendQualifyingReminderEmail(email, race.location);
+	  				sentQualifyingEmail = true;
 	  			} else {
 	  				sendRaceReminderEmail(email, race.location);
+	  				sentRaceEmail = true;
 	  			}
 
 	  			var savedPrediction = {
-	  				qualifing_reminder: qualifyingUsers[user._id],
-	  				race_reminder: raceUsers[user._id]
+	  				qualifing_reminder: sentQualifyingEmail,
+	  				race_reminder: sentRaceEmail
 	  			}
 
 	  			var userId = mongoose.Types.ObjectId(user._id)
