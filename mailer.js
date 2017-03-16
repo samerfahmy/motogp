@@ -80,7 +80,7 @@ var task = cron.schedule('*/60 * * * *', function() {
 		  	for (var i=0; i<predictions.length; i++) {
 
 		  		var prediction = predictions[i];
-	
+
 			  	if (Date.parse(qualifying_start_time) > Date.now()) {
 
 			  		if ((!prediction.pole || prediction.pole === null || prediction.pole.trim().length() === 0) && !prediction.qualifing_reminder) {
@@ -100,6 +100,8 @@ var task = cron.schedule('*/60 * * * *', function() {
 			  		} else {
 			  			ignoredUsers[prediction.user_id] = true;
 			  		}
+			  	} else {
+			  		ignoredUsers[prediction.user_id] = true;
 			  	}
 			  }
 			}
@@ -119,20 +121,16 @@ var task = cron.schedule('*/60 * * * *', function() {
   				}
 
 	  			var email = user.username;
-	  			var sentQualifyingEmail = false;
-	  			var sentRaceEmail = false;
+	  			var savedPrediction = {}
 
 	  			if (qualifyingUsers[user._id] || Date.parse(race.qualifying_start_time) > Date.now()) {
 	  				sendQualifyingReminderEmail(email, race.location);
+	  				savedPrediction.qualifing_reminder = true;
 	  				sentQualifyingEmail = true;
 	  			} else {
 	  				sendRaceReminderEmail(email, race.location);
+	  				savedPrediction.race_reminder = true;
 	  				sentRaceEmail = true;
-	  			}
-
-	  			var savedPrediction = {
-	  				qualifing_reminder: sentQualifyingEmail,
-	  				race_reminder: sentRaceEmail
 	  			}
 
 	  			var userId = mongoose.Types.ObjectId(user._id)
