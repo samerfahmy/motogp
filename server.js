@@ -4,6 +4,7 @@ var bodyParser  = require("body-parser")
 var router      = express.Router()
 var mongoose    = require("mongoose")
 var async       = require("async")
+var mailer      = require("./mailer")
 
 var DATABASE_PROD   = "mongodb://samer:SUXhfyuLNFrSfmsU@ds129010.mlab.com:29010/motogp"
 var DATABASE_LOCAL  = "mongodb://localhost:27017/motogp"
@@ -385,5 +386,6 @@ router.route("/api/scores").get(function(req,res){
 });
 
 
+mailer.startEmailRemindersJob()
 app.listen(PORT)
 console.log("Listening on port " + PORT)

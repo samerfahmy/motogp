@@ -17,7 +17,15 @@ var PredictionSchema = new mongoose.Schema({
   pole: String,
   race_pos_1: String,
   race_pos_2: String,
-  race_pos_3: String
+  race_pos_3: String,
+  qualifing_reminder: {
+    type: Boolean,
+    default: false
+  },
+  race_reminder: {
+    type: Boolean,
+    default: false
+  }
 });
 
 var Prediction = mongoose.model('Prediction', PredictionSchema);
