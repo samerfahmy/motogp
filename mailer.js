@@ -43,7 +43,7 @@ function sendRaceReminderEmail(recipient, raceName) {
 }
  
 // Cron task every 60 minutes
-var task = cron.schedule('*/1 * * * *', function() {
+var task = cron.schedule('*/60 * * * *', function() {
 
 	var Race = require("./models/race").Race
   var Prediction = require("./models/prediction").Prediction
