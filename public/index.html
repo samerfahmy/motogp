@@ -247,6 +247,66 @@
         </div>
     </md-content>
 </md-tab>
+<md-tab label="Admin" ng-if="isAdmin">
+<md-content layout-padding>
+    <center>
+        <p>
+            Set the results of races below
+        </p>
+    </center>
+
+    <div ng-repeat="race in adminRaces" md-whiteframe="1" layout-padding class="race-box">
+        <div class="md-title" ng-model="collapse" ng-click="collapse = !collapse"">{{race.location}}</div>
+        <div ng-show="collapse">
+            <span class="md-caption">Qualifying on {{race.qualifying_start_time_str}}</span>
+            <br>
+            <span class="md-caption">Race on {{race.race_start_time_str}}</span>
+            <table>
+                <tr>
+                    <td class="md-caption">Pole</td>
+                    <td>
+                        <md-select name="riderSelect" ng-model="race.pole">
+                          <md-option value=""></md-option>
+                          <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                        </md-select>
+                    </td>
+                </tr>
+                <tr>
+                        <td class="md-caption">First</td>
+                        <td>
+                            <md-select name="riderSelect" ng-model="race.race_pos_1">
+                          <md-option value=""></md-option>
+                          <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                        </md-select>
+                    </td>
+                </tr>
+                <tr>
+                        <td class="md-caption">Second</td>
+                        <td>
+                            <md-select name="riderSelect" ng-model="race.race_pos_2">
+                          <md-option value=""></md-option>
+                          <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                        </md-select>
+                    </td>
+                </tr>
+                <tr>
+                        <td class="md-caption">Third</td>
+                        <td>
+                            <md-select name="riderSelect" ng-model="race.race_pos_3">
+                          <md-option value=""></md-option>
+                          <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                        </md-select>
+                    </td>
+                </tr>
+            </table>
+            <div layout="row" layout-align="left center">
+                <md-button class="md-raised md-primary" ng-click="postResults(race._id)" ng-disabled="postingResults">Post Results</md-button>
+            </div>
+        </div>
+    </div>
+    <br>
+</md-content>
+</md-tab>
 </md-tabs>
 </div>
 <!-- </md-content> -->

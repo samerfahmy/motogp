@@ -83,7 +83,7 @@ var task = cron.schedule('*/60 * * * *', function() {
 
 			  	if (Date.parse(qualifying_start_time) > Date.now()) {
 
-			  		if ((!prediction.pole || prediction.pole === null || prediction.pole.trim().length() === 0) && !prediction.qualifing_reminder) {
+			  		if ((!prediction.pole || prediction.pole === null || prediction.pole.trim().length === 0) && !prediction.qualifing_reminder) {
 			  			qualifyingUsers[prediction.user_id] = true;
 			  		} else {
 			  			ignoredUsers[prediction.user_id] = true;
@@ -91,9 +91,9 @@ var task = cron.schedule('*/60 * * * *', function() {
 
 			  	} else if (Date.now() - Date.parse(qualifying_start_time) > 21600000) {
 
-			  		if ((!prediction.race_pos_1 || prediction.race_pos_1 === null || prediction.race_pos_1.trim().length() === 0
-			  				 || !prediction.race_pos_2 || prediction.race_pos_2 === null || prediction.race_pos_2.trim().length() === 0
-			  				 || !prediction.race_pos_3 || prediction.race_pos_3 === null || prediction.race_pos_3.trim().length() === 0
+			  		if ((!prediction.race_pos_1 || prediction.race_pos_1 === null || prediction.race_pos_1.trim().length === 0
+			  				 || !prediction.race_pos_2 || prediction.race_pos_2 === null || prediction.race_pos_2.trim().length === 0
+			  				 || !prediction.race_pos_3 || prediction.race_pos_3 === null || prediction.race_pos_3.trim().length === 0
 			  			)
 			  		 && !prediction.race_reminder) {
 			  		 	raceUsers[prediction.user_id] = true;

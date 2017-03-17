@@ -20,9 +20,11 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   	name : $cookies.get('user_name')
   }
   $scope.races = null
+  $scope.adminRaces = null
   $scope.riders = null
   $scope.loggedIn = false
   $scope.initialized = false
+  $scope.isAdmin = false
 
   $scope.predictionRace = null
 
@@ -92,6 +94,8 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   						 null).then(
   		function success(response) {
   			$scope.races = response.data
+        // Create a copy for admin purposes
+        $scope.adminRaces = response.data.slice();
   			for (var i=0; i<$scope.races.length; i++) {
 					var race = $scope.races[i]
 					var qualifying_start_time_str = moment(race["qualifying_start_time"]).format("dddd, MMMM Do, h:mm a");
@@ -128,6 +132,16 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   		},
   		function error(response) {
   	});
+
+    // Check the admin status
+    $http.get('/api/check-admin',
+               null,
+               null).then(
+      function success(response) {
+        $scope.isAdmin = response.data.isAdmin
+      },
+      function error(response) {
+    });
   }
 
   $scope.getPredictions = function() {
@@ -232,6 +246,83 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
         );
         $scope.postingPredictions = false;
   	});
+  }
+
+  $scope.postResults = function(raceId) {
+
+    $scope.postingResults = true;
+
+    var results = [];
+
+    // verify the inputs first
+    for (var x=0; x<$scope.adminRaces.length; x++) {
+      var race = $scope.races[x];
+
+      if (race._id != raceId) {
+        continue;
+      }
+
+      var selectionsArray = []
+      selectionsArray[0] = $scope.checkForEmpty(race.race_pos_1)
+      selectionsArray[1] = $scope.checkForEmpty(race.race_pos_2)
+      selectionsArray[2] = $scope.checkForEmpty(race.race_pos_3)
+
+      for (var i=0; i<selectionsArray.length; i++) {
+        for (var j=0; j<selectionsArray.length; j++) {
+          if (i != j && selectionsArray[i] === selectionsArray[j] && selectionsArray[i] != null) {
+            // duplicate selection, return an error
+            $mdDialog.show(
+              $mdDialog.alert()
+                .parent(angular.element(document.body))
+                .clickOutsideToClose(true)
+                .title('Error')
+                .textContent('You\'ve picked ' + selectionsArray[i] + ' more than once.')
+                .ok('OK')
+            );
+            $scope.postingResults = false;
+            return;
+          }
+        }
+      }
+
+      var result = {}
+
+      result._id = race._id
+      result.pole = $scope.checkForEmpty(race.pole)
+      result.race_pos_1 = $scope.checkForEmpty(race.race_pos_1)
+      result.race_pos_2 = $scope.checkForEmpty(race.race_pos_2)
+      result.race_pos_3 = $scope.checkForEmpty(race.race_pos_3)
+
+      results.push(result)
+    }
+
+    console.log(results.length)
+
+    $http.post('/api/races/results',
+               results,
+               null).then(
+      function success(response) {
+        $mdDialog.show(
+          $mdDialog.alert()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title('Success!')
+            .textContent('Results have been posted!')
+            .ok('OK')
+        );
+        $scope.postingResults = false;
+      },
+      function error(response) {
+        $mdDialog.show(
+          $mdDialog.alert()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title('Error')
+            .textContent('Please try to post your results again.')
+            .ok('OK')
+        );
+        $scope.postingResults = false;
+    });
   }
 
   $scope.init = function() {

@@ -1,10 +1,11 @@
-const express     = require('express')
-const app         = express()
-const bodyParser  = require("body-parser")
-const router      = express.Router()
-const mongoose    = require("mongoose")
-const async       = require("async")
-const mailer      = require("./mailer")
+const express       = require('express')
+const app           = express()
+const cookieParser  = require("cookie-parser")
+const bodyParser    = require("body-parser")
+const router        = express.Router()
+const mongoose      = require("mongoose")
+const async         = require("async")
+const mailer        = require("./mailer")
 
 const DATABASE_PROD   = "mongodb://samer:SUXhfyuLNFrSfmsU@ds129010.mlab.com:29010/motogp"
 const DATABASE_LOCAL  = "mongodb://localhost:27017/motogp"
@@ -26,7 +27,32 @@ app.use(express.static('public', options))
 
 /* Initialize settings */
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({"extended" : false}));
+
+function userAuthenticator (req, res, next) {
+  var User = require("./models/user").User
+  var userId = req.cookies.user_id;
+
+  if (userId) {
+    User.findOne({"_id":userId}, function(err,data) {
+      // Mongo command to fetch all data from collection.
+      if (err || data === null || data.length === 0) {
+        req._user = null;
+        next();
+      } else {
+        req._user = data;
+      }
+      
+      next();
+    });
+  } else {
+    req._user = null;
+    next();
+  }
+}
+
+app.use(userAuthenticator);
 app.use('/',router);
 
 /* Initialize endpoint logger */
@@ -93,6 +119,17 @@ router.route("/api/login").post(function(req,res){
   });
 });
 
+/* Check if the user is an admin */
+router.route("/api/check-admin").get(function(req,res){
+  var isAdmin = false;
+
+  if (req._user && req._user.admin) {
+    isAdmin = true
+  }
+
+  res.json({isAdmin : isAdmin})
+});
+
 /* Races endpoint to retrieve all races */
 router.route("/api/races").get(function(req,res){
   var response = {}
@@ -124,6 +161,11 @@ router.route("/api/races/results").post(function(req,res){
   var races = req.body
 
   if (!races || races.length === 0) {
+    res.statusCode = 400;
+    return;
+  }
+
+  if (!req._user || !req._user.admin) {
     res.statusCode = 400;
     return;
   }
