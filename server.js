@@ -1,26 +1,20 @@
-var express     = require('express')
-var app         = express()
-var bodyParser  = require("body-parser")
-var router      = express.Router()
-var mongoose    = require("mongoose")
-var async       = require("async")
-var mailer      = require("./mailer")
+const express     = require('express')
+const app         = express()
+const bodyParser  = require("body-parser")
+const router      = express.Router()
+const mongoose    = require("mongoose")
+const async       = require("async")
+const mailer      = require("./mailer")
 
-var DATABASE_PROD   = "mongodb://samer:SUXhfyuLNFrSfmsU@ds129010.mlab.com:29010/motogp"
-var DATABASE_LOCAL  = "mongodb://localhost:27017/motogp"
-
-console.log("process.env.NODE_ENV: " + process.env.NODE_ENV)
-console.log("process.env.PORT: " + process.env.PORT)
+const DATABASE_PROD   = "mongodb://samer:SUXhfyuLNFrSfmsU@ds129010.mlab.com:29010/motogp"
+const DATABASE_LOCAL  = "mongodb://localhost:27017/motogp"
 
 /* Load config settings */
-var DATABASE = process.env.NODE_ENV && process.env.NODE_ENV == 'production' ? DATABASE_PROD : DATABASE_LOCAL
-var PORT     = process.env.PORT ? process.env.PORT : 3000
-
-console.log("database: " + DATABASE)
-console.log("port: " + PORT)
+const DATABASE = process.env.NODE_ENV && process.env.NODE_ENV == 'production' ? DATABASE_PROD : DATABASE_LOCAL
+const PORT     = process.env.PORT ? process.env.PORT : 3000
 
 /* Expose a public static folder called 'public' */
-var options = {
+const options = {
   dotfiles: 'ignore',
   etag: false,
   extensions: ['htm', 'html'],
@@ -34,7 +28,27 @@ app.use(express.static('public', options))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({"extended" : false}));
 app.use('/',router);
-// Open database
+
+/* Initialize endpoint logger */
+const myLogger = function (req, res, next) {
+  // For now only log the predicitons POST endpoint
+  if (req.originalUrl.includes('/predictions') && req.method == 'POST') {
+    var util = require('util')
+    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    var reqBody = util.inspect(req.body).replace(/(\r\n|\n|\r)/gm,"").replace(/\s+/g," ");
+    var dateStr = new Date().toISOString();
+    var logLine = dateStr + " { timestamp: \"" + dateStr + "\" , request_method: "+ req.method + " , url: \"" + fullUrl + "\" , reqBody: " + reqBody + "}\n";
+
+    var fs = require('fs');
+    fs.appendFile(__dirname + "/serverlog.txt", logLine, function(err) {
+    }); 
+  }
+  next()
+}
+router.use(myLogger)
+
+
+/* Open database */
 mongoose.connect(DATABASE);
 
 /* Status check endpoint */
@@ -56,6 +70,7 @@ router.route("/api/_status").get(function(req,res){
   });
 });
 
+/* Login endpoint */
 router.route("/api/login").post(function(req,res){
   var response = {}
   var User = require("./models/user").User
@@ -78,6 +93,7 @@ router.route("/api/login").post(function(req,res){
   });
 });
 
+/* Races endpoint to retrieve all races */
 router.route("/api/races").get(function(req,res){
   var response = {}
   var Race = require("./models/race").Race
@@ -100,6 +116,45 @@ router.route("/api/races").get(function(req,res){
   });
 });
 
+/* Races endpoint to post race results */
+router.route("/api/races/results").post(function(req,res){
+  var response = {}
+  var Race = require("./models/race").Race
+
+  var races = req.body
+
+  if (!races || races.length === 0) {
+    res.statusCode = 400;
+    return;
+  }
+
+  var totalProcessed = 0;
+
+  for (var i=0; i<races.length; i++) {
+
+    var race = races[i];
+
+    var raceId = mongoose.Types.ObjectId(race._id);
+
+    Race.findOneAndUpdate({"_id":raceId}, race, {upsert:false}, function(err, data){
+      if (err) {
+        res.statusCode = 500
+        response = err
+      }
+
+      // Because of the async nature of the DB calls, we will send the response when
+      // all have been processed
+      totalProcessed++
+
+      if (totalProcessed == races.length) {
+        res.json(response)
+      }
+    });
+
+  }
+});
+
+/* Riders endpoint to retrieve all riders  */
 router.route("/api/riders").get(function(req,res){
   var response = {}
   var Rider = require("./models/rider").Rider
@@ -122,6 +177,7 @@ router.route("/api/riders").get(function(req,res){
   });
 });
 
+/* Predictions endpoint to get predictions for a specific user */
 router.route("/api/users/:user_id/predictions").get(function(req,res){
   var response = {}
   var Prediction = require("./models/prediction").Prediction
@@ -145,6 +201,7 @@ router.route("/api/users/:user_id/predictions").get(function(req,res){
   });
 });
 
+/* Predictions endpoint to retrieve a specific predicition for a given race and user */
 router.route("/api/users/:user_id/race/:race_id/predictions").get(function(req,res){
   var response = {}
   var Prediction = require("./models/prediction").Prediction
@@ -171,7 +228,14 @@ router.route("/api/users/:user_id/race/:race_id/predictions").get(function(req,r
   });
 });
 
+/* Predictions endpoint to set predictions for a particular user */
 router.route("/api/users/:user_id/predictions").post(function(req,res){
+  
+  if (req.body.length === 0) {
+    res.statusCode = 400;
+    return;
+  }
+
   var response = {}
   var Prediction = require("./models/prediction").Prediction
   var Race = require("./models/race").Race
@@ -180,6 +244,11 @@ router.route("/api/users/:user_id/predictions").post(function(req,res){
   var userId = mongoose.Types.ObjectId(req.params.user_id)
 
   var predictions = req.body
+
+  if (!predictions || predictions.length === 0) {
+    res.statusCode = 400;
+    return;
+  }
 
   var totalProcessed = 0
 
@@ -243,6 +312,7 @@ router.route("/api/users/:user_id/predictions").post(function(req,res){
   }
 });
 
+/* Scores endpoint to retrieve all the scores */
 router.route("/api/scores").get(function(req,res){
   var response = {}
   var Race = require("./models/race").Race
@@ -386,6 +456,13 @@ router.route("/api/scores").get(function(req,res){
 });
 
 
+console.log("Environment (undefined = local): " + process.env.NODE_ENV)
+console.log("Config PORT (undefined = local): " + process.env.PORT)
+console.log("Database: " + DATABASE)
+
+/* Start the reminder mailer deomon */
 mailer.startEmailRemindersJob()
+
+/* Start the server */
 app.listen(PORT)
-console.log("Listening on port " + PORT)
+console.log("Server started and listening on port " + PORT)
