@@ -31,7 +31,14 @@
 
 <body>
 
-<div ng-app="motogpApp" ng-controller="motogpCtrl" ng-cloak ng-show="loadedState.initialized" ng-init="init()">
+<div ng-app="motogpApp" ng-controller="motogpCtrl" ng-cloak ng-init="init()">
+
+  <center>
+    <div ng-show="!loadedState.initialized">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      <span class="md-caption">Loading information... please wait.</span>
+    </div>
+  </center>
 
   <md-content layout="column" id="login" ng-show="!loadedState.loggedIn && loadedState.initialized" layout-padding flex>
     <center>
@@ -65,7 +72,7 @@
     </center>
   </md-content>
 
-  <div id="data" ng-if="loadedState.loggedIn">
+  <div id="data" ng-if="loadedState.loggedIn && loadedState.initialized">
     <md-tabs class="md-accent" md-dynamic-height>
       <md-tab label="Prediction">
         <md-content layout-padding>
