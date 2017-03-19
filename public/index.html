@@ -147,20 +147,68 @@
           </div>
         </md-content>
       </md-tab>
-      <md-tab label="Results">
+      <md-tab label="Scores">
         <md-content layout-padding>
           <center>
-            <p>
-              Your results for all completed races are shown below
-            </p>
+            <span class="md-caption">
+              Click on a cell in the table to see predictions and results
+            </span>
           </center>
 
-          <div ng-repeat="race in races" md-whiteframe="1" layout-padding class="race-box" ng-show="checkExpired(race.qualifying_start_time) && checkExpired(race.race_start_time)">
+          <table class="score-table">
+            <tr>
+              <td class="race-location-column"></td>
+              <td class="name-column" ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].name}}</td>
+            <tr>
+            <tr class="total-row">
+                <td>Total</td>
+                <td ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].total}}</td>
+            <tr>
+            <tr ng-repeat="race in scores.races">
+              <td>{{race.location}}</td>
+              <td ng-repeat="user_id in scores.user_ids" ng-click="showScoreDialog($event, scores.user_data[user_id].name, race.location, scores.user_data[user_id].races[race.race_id], race)">{{scores.user_data[user_id].races[race.race_id] ? scores.user_data[user_id].races[race.race_id].score : 0}}</td>
+            </tr>
+          </table>
+
+          <div style="visibility: hidden">
+            <div class="md-dialog-container" id="scoreDialog">
+              <md-dialog layout-padding>
+                <span class="md-title">{{scoreDialogElement.user_name}}</span>
+                <br>
+                <span class="md-caption">{{scoreDialogElement.race_location}}</span>
+                <p>
+                  <span>Predictions</span><br>
+                  <span>Pole - {{scoreDialogElement.prediction.pole}}</span><br>
+                  <span>1st - {{scoreDialogElement.prediction.race_pos_1}}</span><br>
+                  <span>2nd - {{scoreDialogElement.prediction.race_pos_2}}</span><br>
+                  <span>3rd - {{scoreDialogElement.prediction.race_pos_3}}</span><br>
+                  <br>
+                  <span>Results</span><br>
+                  <span>Pole - {{scoreDialogElement.results.pole}}</span><br>
+                  <span>1st - {{scoreDialogElement.results.race_pos_1}}</span><br>
+                  <span>2nd - {{scoreDialogElement.results.race_pos_2}}</span><br>
+                  <span>3rd - {{scoreDialogElement.results.race_pos_3}}</span><br>
+                </p>
+              </md-dialog>
+            </div>
+          </div>
+        </md-content>
+      </md-tab>
+      <md-tab label="Calendar">
+        <md-content layout-padding>
+          <center>
+            <span class="md-caption">
+              Results for all completed races are shown below
+            </scan>
+          </center>
+
+          <div ng-repeat="race in races" md-whiteframe="1" layout-padding class="race-box">
             <span class="md-title">{{race.location}}</span>
             <br>
             <span class="md-caption">Qualifying on {{race.qualifying_start_time_str}}</span>
             <br>
             <span class="md-caption">Race on {{race.race_start_time_str}}</span>
+            <div  ng-show="checkExpired(race.qualifying_start_time) && checkExpired(race.race_start_time)">
             <table>
               <tr>
                 <td></td>
@@ -208,58 +256,7 @@
                 </td>
               </tr>
             </table>
-          </div>
-        </md-content>
-      </md-tab>
-      <md-tab label="Scores">
-        <md-content layout-padding>
-          <table class="score-table">
-            <tr>
-              <td class="race-location-column"></td>
-              <td class="name-column" ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].name}}</td>
-            <tr>
-            <tr class="total-row">
-                <td>Total</td>
-                <td ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].total}}</td>
-            <tr>
-            <tr ng-repeat="race in scores.races">
-              <td>{{race.location}}</td>
-              <td ng-repeat="user_id in scores.user_ids" ng-click="showScoreDialog($event, scores.user_data[user_id].name, race.location, scores.user_data[user_id].races[race.race_id], race)">{{scores.user_data[user_id].races[race.race_id] ? scores.user_data[user_id].races[race.race_id].score : 0}}</td>
-            </tr>
-          </table>
-
-          <div style="visibility: hidden">
-            <div class="md-dialog-container" id="scoreDialog">
-              <md-dialog layout-padding>
-                <span class="md-title">{{scoreDialogElement.user_name}}</span>
-                <br>
-                <span class="md-caption">{{scoreDialogElement.race_location}}</span>
-                <p>
-                  <span>Predictions</span><br>
-                  <span>Pole - {{scoreDialogElement.prediction.pole}}</span><br>
-                  <span>1st - {{scoreDialogElement.prediction.race_pos_1}}</span><br>
-                  <span>2nd - {{scoreDialogElement.prediction.race_pos_2}}</span><br>
-                  <span>3rd - {{scoreDialogElement.prediction.race_pos_3}}</span><br>
-                  <br>
-                  <span>Results</span><br>
-                  <span>Pole - {{scoreDialogElement.results.pole}}</span><br>
-                  <span>1st - {{scoreDialogElement.results.race_pos_1}}</span><br>
-                  <span>2nd - {{scoreDialogElement.results.race_pos_2}}</span><br>
-                  <span>3rd - {{scoreDialogElement.results.race_pos_3}}</span><br>
-                </p>
-              </md-dialog>
             </div>
-          </div>
-        </md-content>
-      </md-tab>
-      <md-tab label="Calendar">
-        <md-content layout-padding>
-          <div ng-repeat="race in races" md-whiteframe="1" layout-padding class="race-box">
-            <span class="md-title">{{race.location}}</span>
-            <br>
-            <span class="md-caption">Qualifying on {{race.qualifying_start_time_str}}</span>
-            <br>
-            <span class="md-caption">Race on {{race.race_start_time_str}}</span>
           </div>
         </md-content>
       </md-tab>
