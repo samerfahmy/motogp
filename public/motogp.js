@@ -15,10 +15,7 @@ app.config(function($mdThemingProvider, $mdAriaProvider){
 
 app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cookies', function($scope, $http, $mdToast, $mdDialog, $cookies) {
 
-  $scope.user = {
-  	_id : $cookies.get('user_id'),
-  	name : $cookies.get('user_name')
-  }
+  $scope.user = null
   $scope.races = null
   $scope.adminRaces = null
   $scope.riders = null
@@ -333,6 +330,12 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   }
 
   $scope.init = function() {
+
+    $scope.user = {
+      _id : $cookies.get('user_id'),
+      name : $cookies.get('user_name')
+    }
+
   	if ($scope.user._id && $scope.user.name) {
 	  	$scope.loggedIn = true
 
