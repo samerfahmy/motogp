@@ -20,8 +20,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   $scope.races = null
   $scope.adminRaces = null
   $scope.riders = null
-  $scope.loggedIn = false
-  $scope.initialized = false
   $scope.isAdmin = false
   $scope.predictionRace = null
   $scope.scoreDialogElement = null
@@ -32,20 +30,27 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
     scoresLoaded: false,
     predictionsLoaded: false
   }
-  $scope.loggingIn = false
+  $scope.loadedState = {
+    loggingIn: false,
+    loggedIn: false,
+    initialized: false
+  }
 
   $scope.checkLoggedIn = function() {
 
-    var loggedIn =
+    var isLoggedIn =
       $scope.contentLoaded.racesLoaded &&
       $scope.contentLoaded.ridersLoaded &&
       $scope.contentLoaded.scoresLoaded &&
       $scope.contentLoaded.predictionsLoaded
 
-    if (loggedIn) {
-      $scope.initialized = true
-      $scope.loggingIn = false
-      $scope.loggedIn = true
+    if (isLoggedIn) {
+      var state = {
+        initialized: true,
+        loggingIn: true,
+        loggedIn: true
+      }
+      $scope.loadedState = state
     }
 
   }
@@ -79,7 +84,7 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   }
 
   $scope.login = function() {
-    $scope.loggingIn = true
+    $scope.loadedState.loggingIn = true
 
   	$http.post('/api/login',
   						 {
@@ -105,7 +110,7 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   			$scope.getData()
   		},
   		function error(response) {
-        $scope.loggingIn = false
+        $scope.loadedState.loggingIn = false
   			$mdDialog.show(
           $mdDialog.alert()
             .parent(angular.element(document.body))
@@ -405,7 +410,7 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   	if ($scope.user._id && $scope.user.name) {
       $scope.getData()
 	  } else {
-      $scope.initialized = true
+      $scope.loadedState.initialized = true
     }
 	}
 
