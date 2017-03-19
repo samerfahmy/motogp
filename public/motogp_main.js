@@ -13,7 +13,8 @@ app.config(function($mdThemingProvider, $mdAriaProvider){
     });
 });
 
-app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cookies', function($scope, $http, $mdToast, $mdDialog, $cookies) {
+app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cookies', '$window',
+                function($scope, $http, $mdToast, $mdDialog, $cookies, $window) {
 
   $scope.user = null
   $scope.races = null
@@ -24,6 +25,7 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   $scope.isAdmin = false
   $scope.predictionRace = null
   $scope.scoreDialogElement = null
+  $scope.adminUser = {}
 
   $scope.checkExpired = function(date) {
   	var srcDate = Date.parse(date)
@@ -89,6 +91,26 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
             .ok('OK')
         );
   	});
+  }
+
+  $scope.logout = function() {
+    $cookies.remove('user_id');
+    $cookies.remove('user_name');
+    $window.location.reload();
+  }
+
+  $scope.submitUser = function() {
+    console.log($scope.adminUser);
+
+    $http.post('/api/users',
+               $scope.adminUser,
+               null).then(
+      function success(response) {
+        alert("User created successfully.\n\nPlease remember your password.");
+      },
+      function error(response) {
+        alert("There was a problem creating your password.\n\nPlease try again later.");
+    });
   }
 
   $scope.getData = function() {

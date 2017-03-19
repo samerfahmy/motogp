@@ -219,6 +219,69 @@ router.route("/api/riders").get(function(req,res){
   });
 });
 
+/* Users endpoint to create a new user */
+router.route("/api/users").post(function(req,res){
+  // Only admins can create users
+  // if (!req._user || !req._user.admin) {
+  //   res.statusCode = 403
+  //   res.json({})
+  //   return
+  // }
+
+  var userToCreate = req.body
+  var sanitizedUser = {}
+
+  // Verify inputs
+  if (!userToCreate.username || userToCreate.username === null || userToCreate.username.trim().length === 0) {
+    res.statusCode = 400
+    res.json({})
+    return;
+  }
+
+  sanitizedUser.username = userToCreate.username
+
+  if (userToCreate.password && userToCreate.password != null && userToCreate.password.trim().length != 0) {
+    sanitizedUser.password = userToCreate.password
+  }
+
+  if (userToCreate.name && userToCreate.name != null && userToCreate.name.trim().length != 0) {
+    sanitizedUser.name = userToCreate.name
+  }
+
+  if (userToCreate.test) {
+    sanitizedUser.test = userToCreate.test  
+  }
+
+  if (userToCreate.admin) {
+    sanitizedUser.admin = userToCreate.admin  
+  }
+
+  var User = require("./models/user").User
+  User.findOne({"username":userToCreate.username}, function(err, data) {
+    if (data === null || data.length === 0) {
+      if ((!sanitizedUser.password || sanitizedUser.password === null || sanitizedUser.password.trim().length === 0)
+          || (!sanitizedUser.name || sanitizedUser.name === null || sanitizedUser.name.trim().length === 0)) {
+        // This is a new user, thus password and name can't be empty
+        res.statusCode = 400
+        res.json({})
+        return
+      }
+
+      sanitizedUser.test = userToCreate.test ? userToCreate.test : false
+      sanitizedUser.admin = userToCreate.admin ? userToCreate.admin : false
+    }
+
+    User.findOneAndUpdate({"username":userToCreate.username}, sanitizedUser, {upsert:true}, function(err, data) {
+      if (err) {
+        res.statusCode = 500
+        response = err
+      }
+
+      res.json(sanitizedUser)
+    })
+  })
+});
+
 /* Predictions endpoint to get predictions for a specific user */
 router.route("/api/users/:user_id/predictions").get(function(req,res){
   var response = {}

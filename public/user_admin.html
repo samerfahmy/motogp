@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-cookies.min.js"></script>
+
+  <script src="motogp_user_admin.js"></script>
+  <link rel="stylesheet" href="style.css">
+
+  <title>PredictorGP</title>
+</head>
+
+<body>
+
+<div ng-app="motogpApp" ng-controller="motogpAdminCtrl" ng-cloak style="padding:0 0 0 15px; font-family:sans-serif;">
+
+  <h2>Create or Update a User</h2>
+
+  <table>
+    <tr>
+      <td>
+        Username
+      </td>
+      <td>
+        <input type="email" ng-model="user.username"></td>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Password
+      </td>
+      <td>
+        <input type="text" ng-model="user.password"></td>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Name
+      </td>
+      <td>
+        <input type="text" ng-model="user.name"></td>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Test
+      </td>
+      <td>
+        <select ng-model="user.test"
+                ng-options="o.v as o.n for o in [{ n: 'false', v: false }, { n: 'true', v: true }]">
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Admin
+      </td>
+      <td>
+        <select ng-model="user.admin"
+                ng-options="o.v as o.n for o in [{ n: 'false', v: false }, { n: 'true', v: true }]">
+        </select>
+      </td>
+    </tr>
+  </table>
+
+  <button ng-click="submitUser()">Submit</button>
+
+</div>
+
+</body>
+</html>

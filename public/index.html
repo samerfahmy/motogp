@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script> -->
-
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
   <!-- Angular Material style sheet -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.min.css">
 
@@ -20,7 +19,7 @@
   <!-- Moment Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
 
-  <script src="motogp.js"></script>
+  <script src="motogp_main.js"></script>
   <link rel="stylesheet" href="style.css">
 
   <title>PredictorGP</title>
@@ -29,287 +28,334 @@
 <body>
 
 <div ng-app="motogpApp" ng-controller="motogpCtrl" ng-cloak ng-show="initialized" ng-init="init()">
-<!-- <md-content layout-padding flex> -->
 
-<md-content layout="column" id="login" ng-show="!loggedIn" layout-padding flex>
-	<!-- <p>Email: <input type="text" ng-model="username"></p>
-	<p>Password: <input type="password" ng-model="password"></p> -->
+  <md-content layout="column" id="login" ng-show="!loggedIn" layout-padding flex>
+    <center>
+      <h2>Welcome to PredictorGP, the MotoGP predictor game!</h2>
 
-	<center>
-		<h2>Welcome to PredictorGP, the MotoGP predictor game!</h2>
+      <p>Please sign in</p>
+    </center>
+    
+    <md-input-container>
+      <label>Email</label>
+      <input ng-model="username" type="text">
+    </md-input-container>
+    <md-input-container>
+      <label>Password</label>
+      <input ng-model="password" type="password">
+    </md-input-container>
 
-		<p>Please sign in</p>
-	</center>
-	
-	<md-input-container>
-    <label>Email</label>
-    <input ng-model="username" type="text">
-  </md-input-container>
-  <md-input-container>
-    <label>Password</label>
-    <input ng-model="password" type="password">
-  </md-input-container>
+    <md-button class="md-raised md-primary" ng-click="login()">Sign in</md-button>
+    <center>
+      <p class="md-caption">
+        Email <a href="mailto:samerf@gmail.com">samerf@gmail.com</a> to create an account.
+      </p>
+    </center>
+  </md-content>
 
-	<md-button class="md-raised md-primary" ng-click="login()">Sign in</md-button>
-	<center>
-		<p class="md-caption">
-			Email <a href="mailto:samerf@gmail.com">samerf@gmail.com</a> to create an account.
-		</p>
-	</center>
-</md-content>
-<div id="data" ng-show="loggedIn">
-<md-tabs class="md-accent" md-dynamic-height>
-<md-tab label="Prediction">
-<md-content layout-padding>
-	<center>
-		<h2>Welcome {{user.name}}</h2>
-		<p>
-			Enter your predictions for the upcoming race below
-		</p>
-	</center>
-	<div md-whiteframe="1" layout-padding class="race-box">
-		<span class="md-title">{{predictionRace.location}}</span>
-		<br>
-		<span class="md-caption">Qualifying on {{predictionRace.qualifying_start_time_str}}</span>
-		<br>
-		<span class="md-caption">Race on {{predictionRace.race_start_time_str}}</span>
-		<table>
-			<tr>
-				<td class="md-caption">Pole</td>
-				<td>
-					<md-select name="riderSelect" ng-model="predictionRace.selected_pole" ng-disabled="checkExpired(predictionRace.qualifying_start_time)">
-			      <md-option value=""></md-option>
-			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
-			    </md-select>
-		    </td>
-		    <td class="md-caption" ng-class="{green: predictionRace.pole === predictionRace.selected_pole, red: predictionRace.pole != predictionRace.selected_pole}">
-		    	{{predictionRace.pole}}
-		    </td>
-    	</tr>
-    	<tr>
-				<td class="md-caption">First</td>
-				<td>
-					<md-select name="riderSelect" ng-model="predictionRace.selected_race_pos_1" ng-disabled="checkExpired(predictionRace.race_start_time)">
-			      <md-option value=""></md-option>
-			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
-			    </md-select>
-		    </td>
-		    <td class="md-caption" ng-class="{green: predictionRace.race_pos_1 === predictionRace.selected_race_pos_1, red: predictionRace.race_pos_1 != predictionRace.selected_race_pos_1}">
-		    	{{predictionRace.race_pos_1}}
-		    </td>
-    	</tr>
-    	<tr>
-				<td class="md-caption">Second</td>
-				<td>
-					<md-select name="riderSelect" ng-model="predictionRace.selected_race_pos_2" ng-disabled="checkExpired(predictionRace.race_start_time)">
-			      <md-option value=""></md-option>
-			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
-			    </md-select>
-		    </td>
-		    <td class="md-caption" ng-class="{green: predictionRace.race_pos_2 === predictionRace.selected_race_pos_2, red: predictionRace.race_pos_2 != predictionRace.selected_race_pos_2}">
-		    	{{predictionRace.race_pos_2}}
-		    </td>
-    	</tr>
-    	<tr>
-				<td class="md-caption">Third</td>
-				<td>
-					<md-select name="riderSelect" ng-model="predictionRace.selected_race_pos_3" ng-disabled="checkExpired(predictionRace.race_start_time)">
-			      <md-option value=""></md-option>
-			      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
-			    </md-select>
-		    </td>
-		    <td class="md-caption" ng-class="{green: predictionRace.race_pos_3 === predictionRace.selected_race_pos_3, red: predictionRace.race_pos_3 != predictionRace.selected_race_pos_3}">
-		    	{{predictionRace.race_pos_3}}
-		    </td>
-    	</tr>
-    </table>
-	</div>
+  <div id="data" ng-show="loggedIn">
+    <md-tabs class="md-accent" md-dynamic-height>
+      <md-tab label="Prediction">
+        <md-content layout-padding>
+          <center>
+            <h2>Welcome {{user.name}}</h2>
+            <p>
+              Enter your predictions for the upcoming race below
+            </p>
+          </center>
+          <div md-whiteframe="1" layout-padding class="race-box">
+            <span class="md-title">{{predictionRace.location}}</span>
+            <br>
+            <span class="md-caption">Qualifying on {{predictionRace.qualifying_start_time_str}}</span>
+            <br>
+            <span class="md-caption">Race on {{predictionRace.race_start_time_str}}</span>
+            <table>
+              <tr>
+                <td class="md-caption">Pole</td>
+                <td>
+                  <md-select name="riderSelect" ng-model="predictionRace.selected_pole" ng-disabled="checkExpired(predictionRace.qualifying_start_time)">
+                    <md-option value=""></md-option>
+                    <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                  </md-select>
+                </td>
+                <td class="md-caption" ng-class="{green: predictionRace.pole === predictionRace.selected_pole, red: predictionRace.pole != predictionRace.selected_pole}">
+                  {{predictionRace.pole}}
+                </td>
+              </tr>
+              <tr>
+                <td class="md-caption">First</td>
+                <td>
+                  <md-select name="riderSelect" ng-model="predictionRace.selected_race_pos_1" ng-disabled="checkExpired(predictionRace.race_start_time)">
+                    <md-option value=""></md-option>
+                    <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                  </md-select>
+                </td>
+                <td class="md-caption" ng-class="{green: predictionRace.race_pos_1 === predictionRace.selected_race_pos_1, red: predictionRace.race_pos_1 != predictionRace.selected_race_pos_1}">
+                  {{predictionRace.race_pos_1}}
+                </td>
+              </tr>
+              <tr>
+                <td class="md-caption">Second</td>
+                <td>
+                  <md-select name="riderSelect" ng-model="predictionRace.selected_race_pos_2" ng-disabled="checkExpired(predictionRace.race_start_time)">
+                    <md-option value=""></md-option>
+                    <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                  </md-select>
+                </td>
+                <td class="md-caption" ng-class="{green: predictionRace.race_pos_2 === predictionRace.selected_race_pos_2, red: predictionRace.race_pos_2 != predictionRace.selected_race_pos_2}">
+                  {{predictionRace.race_pos_2}}
+                </td>
+              </tr>
+              <tr>
+                <td class="md-caption">Third</td>
+                <td>
+                  <md-select name="riderSelect" ng-model="predictionRace.selected_race_pos_3" ng-disabled="checkExpired(predictionRace.race_start_time)">
+                    <md-option value=""></md-option>
+                    <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                  </md-select>
+                </td>
+                <td class="md-caption" ng-class="{green: predictionRace.race_pos_3 === predictionRace.selected_race_pos_3, red: predictionRace.race_pos_3 != predictionRace.selected_race_pos_3}">
+                  {{predictionRace.race_pos_3}}
+                </td>
+              </tr>
+            </table>
+          </div>
 
-	<br>
+          <br>
 
-	<div layout="row" layout-align="center center">
-		<md-button class="md-raised md-primary" ng-click="postPredictions()" ng-disabled="postingPredictions">Post Predictions</md-button>
-	</div>
-</md-content>
-</md-tab>
-<md-tab label="Results">
-<md-content layout-padding>
-<!-- <div id="data" ng-show="loggedIn"> -->
-	<center>
-		<p>
-			Your results for all completed races are shown below
-		</p>
-	</center>
+          <div layout="row" layout-align="center center">
+            <md-button class="md-raised md-primary" ng-click="postPredictions()" ng-disabled="postingPredictions">Post Predictions</md-button>
+          </div>
+        </md-content>
+      </md-tab>
+      <md-tab label="Results">
+        <md-content layout-padding>
+          <center>
+            <p>
+              Your results for all completed races are shown below
+            </p>
+          </center>
 
-	<div ng-repeat="race in races" md-whiteframe="1" layout-padding class="race-box" ng-show="checkExpired(race.qualifying_start_time) && checkExpired(race.race_start_time)">
-		<span class="md-title">{{race.location}}</span>
-		<br>
-		<span class="md-caption">Qualifying on {{race.qualifying_start_time_str}}</span>
-		<br>
-		<span class="md-caption">Race on {{race.race_start_time_str}}</span>
-		<table>
-			<tr>
-				<td></td>
-				<td>
-					<span class="md-caption">Predictions</span>
-				</td>
-				<td>
-					<span class="md-caption">Results</span>
-				</td>
-			</tr>
-			<tr>
-				<td class="md-caption">Pole</td>
-				<td>
-			    <span>{{race.selected_pole}}</span>
-		    </td>
-		    <td class="md-caption" ng-class="{green: race.pole === race.selected_pole, red: race.pole != race.selected_pole}">
-		    	{{race.pole}}
-		    </td>
-    	</tr>
-    	<tr>
-				<td class="md-caption">First</td>
-				<td>
-			    <span>{{race.selected_race_pos_1}}</span>
-		    </td>
-		    <td class="md-caption" ng-class="{green: race.race_pos_1 === race.selected_race_pos_1, red: race.race_pos_1 != race.selected_race_pos_1}">
-		    	{{race.race_pos_1}}
-		    </td>
-    	</tr>
-    	<tr>
-				<td class="md-caption">Second</td>
-				<td>
-			    <span>{{race.selected_race_pos_2}}</span>
-		    </td>
-		    <td class="md-caption" ng-class="{green: race.race_pos_2 === race.selected_race_pos_2, red: race.race_pos_2 != race.selected_race_pos_2}">
-		    	{{race.race_pos_2}}
-		    </td>
-    	</tr>
-    	<tr>
-				<td class="md-caption">Third</td>
-				<td>
-			    <span>{{race.selected_race_pos_3}}</span>
-		    </td>
-		    <td class="md-caption" ng-class="{green: race.race_pos_3 === race.selected_race_pos_3, red: race.race_pos_3 != race.selected_race_pos_3}">
-		    	{{race.race_pos_3}}
-		    </td>
-    	</tr>
-    </table>
-    <!-- <md-divider ng-if="!$last"></md-divider> -->
-	</div>
-
-	<!-- <br>
-
-	<div layout="row" layout-align="center center">
-		<md-button class="md-raised md-primary" ng-click="postPredictions()">Post Predictions</md-button>
-	</div> -->
-
-<!-- </div> -->
-</md-content>
-</md-tab>
-<md-tab label="Scores">
-    <md-content layout-padding>
-        <table class="score-table">
+          <div ng-repeat="race in races" md-whiteframe="1" layout-padding class="race-box" ng-show="checkExpired(race.qualifying_start_time) && checkExpired(race.race_start_time)">
+            <span class="md-title">{{race.location}}</span>
+            <br>
+            <span class="md-caption">Qualifying on {{race.qualifying_start_time_str}}</span>
+            <br>
+            <span class="md-caption">Race on {{race.race_start_time_str}}</span>
+            <table>
+              <tr>
+                <td></td>
+                <td>
+                  <span class="md-caption">Predictions</span>
+                </td>
+                <td>
+                  <span class="md-caption">Results</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="md-caption">Pole</td>
+                <td>
+                  <span>{{race.selected_pole}}</span>
+                </td>
+                <td class="md-caption" ng-class="{green: race.pole === race.selected_pole, red: race.pole != race.selected_pole}">
+                  {{race.pole}}
+                </td>
+              </tr>
+              <tr>
+                <td class="md-caption">First</td>
+                <td>
+                  <span>{{race.selected_race_pos_1}}</span>
+                </td>
+                <td class="md-caption" ng-class="{green: race.race_pos_1 === race.selected_race_pos_1, red: race.race_pos_1 != race.selected_race_pos_1}">
+                  {{race.race_pos_1}}
+                </td>
+              </tr>
+              <tr>
+                <td class="md-caption">Second</td>
+                <td>
+                  <span>{{race.selected_race_pos_2}}</span>
+                </td>
+                <td class="md-caption" ng-class="{green: race.race_pos_2 === race.selected_race_pos_2, red: race.race_pos_2 != race.selected_race_pos_2}">
+                  {{race.race_pos_2}}
+                </td>
+              </tr>
+              <tr>
+                <td class="md-caption">Third</td>
+                <td>
+                  <span>{{race.selected_race_pos_3}}</span>
+                </td>
+                <td class="md-caption" ng-class="{green: race.race_pos_3 === race.selected_race_pos_3, red: race.race_pos_3 != race.selected_race_pos_3}">
+                  {{race.race_pos_3}}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </md-content>
+      </md-tab>
+      <md-tab label="Scores">
+        <md-content layout-padding>
+          <table class="score-table">
             <tr>
-            	<td class="race-location-column"></td>
-            	<td class="name-column" ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].name}}</td>
+              <td class="race-location-column"></td>
+              <td class="name-column" ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].name}}</td>
             <tr>
             <tr class="total-row">
                 <td>Total</td>
                 <td ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].total}}</td>
             <tr>
             <tr ng-repeat="race in scores.races">
-            	<td>{{race.location}}</td>
-            	<td ng-repeat="user_id in scores.user_ids" ng-click="showScoreDialog($event, scores.user_data[user_id].name, race.location, scores.user_data[user_id].races[race.race_id], race)">{{scores.user_data[user_id].races[race.race_id] ? scores.user_data[user_id].races[race.race_id].score : 0}}</td>
+              <td>{{race.location}}</td>
+              <td ng-repeat="user_id in scores.user_ids" ng-click="showScoreDialog($event, scores.user_data[user_id].name, race.location, scores.user_data[user_id].races[race.race_id], race)">{{scores.user_data[user_id].races[race.race_id] ? scores.user_data[user_id].races[race.race_id].score : 0}}</td>
             </tr>
-        </table>
+          </table>
 
-        <div style="visibility: hidden">
-          <div class="md-dialog-container" id="scoreDialog">
-            <md-dialog layout-padding>
-        	    <span class="md-title">{{scoreDialogElement.user_name}}</span>
-        			<br>
-        			<span class="md-caption">{{scoreDialogElement.race_location}}</span>
-              <p>
-              	<span>Predictions</span><br>
-              	<span>Pole - {{scoreDialogElement.prediction.pole}}</span><br>
-              	<span>1st - {{scoreDialogElement.prediction.race_pos_1}}</span><br>
-              	<span>2nd - {{scoreDialogElement.prediction.race_pos_2}}</span><br>
-              	<span>3rd - {{scoreDialogElement.prediction.race_pos_3}}</span><br>
-              	<br>
-              	<span>Results</span><br>
-              	<span>Pole - {{scoreDialogElement.results.pole}}</span><br>
-              	<span>1st - {{scoreDialogElement.results.race_pos_1}}</span><br>
-              	<span>2nd - {{scoreDialogElement.results.race_pos_2}}</span><br>
-              	<span>3rd - {{scoreDialogElement.results.race_pos_3}}</span><br>
-              </p>
-            </md-dialog>
-          </div>
-        </div>
-    </md-content>
-</md-tab>
-<md-tab label="Admin" ng-if="isAdmin">
-<md-content layout-padding>
-    <center>
-        <p>
-            Set the results of races below
-        </p>
-    </center>
-
-    <div ng-repeat="race in adminRaces" md-whiteframe="1" layout-padding class="race-box">
-        <div class="md-title" ng-model="collapse" ng-click="collapse = !collapse"">{{race.location}}</div>
-        <div ng-show="collapse">
-            <span class="md-caption">Qualifying on {{race.qualifying_start_time_str}}</span>
-            <br>
-            <span class="md-caption">Race on {{race.race_start_time_str}}</span>
-            <table>
-                <tr>
-                    <td class="md-caption">Pole</td>
-                    <td>
-                        <md-select name="riderSelect" ng-model="race.pole">
-                          <md-option value=""></md-option>
-                          <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
-                        </md-select>
-                    </td>
-                </tr>
-                <tr>
-                        <td class="md-caption">First</td>
-                        <td>
-                            <md-select name="riderSelect" ng-model="race.race_pos_1">
-                          <md-option value=""></md-option>
-                          <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
-                        </md-select>
-                    </td>
-                </tr>
-                <tr>
-                        <td class="md-caption">Second</td>
-                        <td>
-                            <md-select name="riderSelect" ng-model="race.race_pos_2">
-                          <md-option value=""></md-option>
-                          <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
-                        </md-select>
-                    </td>
-                </tr>
-                <tr>
-                        <td class="md-caption">Third</td>
-                        <td>
-                            <md-select name="riderSelect" ng-model="race.race_pos_3">
-                          <md-option value=""></md-option>
-                          <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
-                        </md-select>
-                    </td>
-                </tr>
-            </table>
-            <div layout="row" layout-align="left center">
-                <md-button class="md-raised md-primary" ng-click="postResults(race._id)" ng-disabled="postingResults">Post Results</md-button>
+          <div style="visibility: hidden">
+            <div class="md-dialog-container" id="scoreDialog">
+              <md-dialog layout-padding>
+                <span class="md-title">{{scoreDialogElement.user_name}}</span>
+                <br>
+                <span class="md-caption">{{scoreDialogElement.race_location}}</span>
+                <p>
+                  <span>Predictions</span><br>
+                  <span>Pole - {{scoreDialogElement.prediction.pole}}</span><br>
+                  <span>1st - {{scoreDialogElement.prediction.race_pos_1}}</span><br>
+                  <span>2nd - {{scoreDialogElement.prediction.race_pos_2}}</span><br>
+                  <span>3rd - {{scoreDialogElement.prediction.race_pos_3}}</span><br>
+                  <br>
+                  <span>Results</span><br>
+                  <span>Pole - {{scoreDialogElement.results.pole}}</span><br>
+                  <span>1st - {{scoreDialogElement.results.race_pos_1}}</span><br>
+                  <span>2nd - {{scoreDialogElement.results.race_pos_2}}</span><br>
+                  <span>3rd - {{scoreDialogElement.results.race_pos_3}}</span><br>
+                </p>
+              </md-dialog>
             </div>
-        </div>
-    </div>
-    <br>
-</md-content>
-</md-tab>
-</md-tabs>
-</div>
-<!-- </md-content> -->
+          </div>
+        </md-content>
+      </md-tab>
+      <md-tab label="Admin" ng-if="isAdmin">
+        <md-content layout-padding>
+          <center>
+            <p>
+                Set the results of races below
+            </p>
+          </center>
+
+          <div ng-repeat="race in adminRaces" md-whiteframe="1" layout-padding class="race-box">
+            <div class="md-title" ng-model="collapse" ng-click="collapse = !collapse"">{{race.location}}</div>
+            <div ng-show="collapse">
+              <span class="md-caption">Qualifying on {{race.qualifying_start_time_str}}</span>
+              <br>
+              <span class="md-caption">Race on {{race.race_start_time_str}}</span>
+              <table>
+                <tr>
+                  <td class="md-caption">Pole</td>
+                  <td>
+                    <md-select name="riderSelect" ng-model="race.pole">
+                      <md-option value=""></md-option>
+                      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                    </md-select>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="md-caption">First</td>
+                  <td>
+                    <md-select name="riderSelect" ng-model="race.race_pos_1">
+                      <md-option value=""></md-option>
+                      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                    </md-select>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="md-caption">Second</td>
+                  <td>
+                    <md-select name="riderSelect" ng-model="race.race_pos_2">
+                      <md-option value=""></md-option>
+                      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                    </md-select>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="md-caption">Third</td>
+                  <td>
+                    <md-select name="riderSelect" ng-model="race.race_pos_3">
+                      <md-option value=""></md-option>
+                      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                    </md-select>
+                  </td>
+                </tr>
+              </table>
+              <div layout="row" layout-align="left center">
+                <md-button class="md-raised md-primary" ng-click="postResults(race._id)" ng-disabled="postingResults">Post Results</md-button>
+              </div>
+            </div>
+          </div>
+          <br>
+          <center>
+            <p>
+                Create or Update a User
+            </p>
+          </center>
+          <div md-whiteframe="1">
+            <table>
+              <tr>
+                <td>
+                  Username
+                </td>
+                <td>
+                  <input type="email" ng-model="adminUser.username"></td>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Password
+                </td>
+                <td>
+                  <input type="text" ng-model="adminUser.password"></td>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Name
+                </td>
+                <td>
+                  <input type="text" ng-model="adminUser.name"></td>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Test
+                </td>
+                <td>
+                  <md-select ng-model="adminUser.test">
+                    <md-option value="true">true</md-option>
+                    <md-option value="false">false</md-option>
+                  </md-select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Admin
+                </td>
+                <td>
+                  <md-select ng-model="adminUser.admin">
+                    <md-option value="true">true</md-option>
+                    <md-option value="false">false</md-option>
+                  </md-select>
+                </td>
+              </tr>
+            </table>
+
+            <md-button class="md-raised md-primary" ng-click="submitUser()">Submit</md-button>
+
+          </div>
+        </md-content>
+      </md-tab>
+      <md-tab label="Logout" ng-click="logout()">
+      </md-tab>
+    </md-tabs>
+  </div>
+
 </div>
 
 </body>
