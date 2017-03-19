@@ -25,9 +25,7 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   $scope.loggedIn = false
   $scope.initialized = false
   $scope.isAdmin = false
-
   $scope.predictionRace = null
-
   $scope.scoreDialogElement = null
 
   $scope.checkExpired = function(date) {
@@ -68,8 +66,17 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   		function success(response) {
   			$scope.user = response.data
 
-  			$cookies.put('user_id', response.data._id)
-  			$cookies.put('user_name', response.data.name)
+        // expire in 1 year
+        var expiryDate = new Date()
+        expiryDate = new Date(expiryDate.setDate(expiryDate.getDate() + 365))
+
+        // create cookie options
+        var cookieOptions = {
+          expires: expiryDate
+        }
+
+  			$cookies.put('user_id', response.data._id, cookieOptions)
+  			$cookies.put('user_name', response.data.name, cookieOptions)
 
   			$scope.loggedIn = true
 
