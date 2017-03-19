@@ -238,7 +238,7 @@ router.route("/api/users").post(function(req,res){
     return;
   }
 
-  sanitizedUser.username = userToCreate.username
+  sanitizedUser.username = userToCreate.username.toLowerCase()
 
   if (userToCreate.password && userToCreate.password != null && userToCreate.password.trim().length != 0) {
     sanitizedUser.password = userToCreate.password
