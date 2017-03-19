@@ -18,7 +18,7 @@ function sendQualifyingReminderEmail(recipient, raceName) {
     from: '"PredictorGP" <predictorgp@gmail.com>', // sender address
     to: recipient, // list of receivers
     subject: 'Reminder to predict for ' + raceName + ' qualifying', // Subject line
-    text: 'This is a friendly reminder to put your predictions in for the ' + raceName + ' qualifying at http://motogp.tafasa.com.\n\nVisit http://www.motogp.com for info.\n\n\nSincerely,\nYour friends at PredictorGP', // plain text body
+    text: 'This is a friendly reminder to put your predictions in for the ' + raceName + ' qualifying at http://motogp.tafasa.com.\n\nVisit http://www.motogp.com for latest results.\n\n\nSincerely,\nYour friends at PredictorGP', // plain text body
     //html: '' // html body
 	};
 
@@ -33,7 +33,7 @@ function sendRaceReminderEmail(recipient, raceName) {
     from: '"PredictorGP" <predictorgp@gmail.com>', // sender address
     to: recipient, // list of receivers
     subject: 'Reminder to predict for ' + raceName + ' race', // Subject line
-    text: 'This is a friendly reminder to put your predictions in for the ' + raceName + ' race at http://motogp.tafasa.com.\n\nVisit http://www.motogp.com for info.\n\n\nSincerely,\nYour friends at PredictorGP', // plain text body
+    text: 'This is a friendly reminder to put your predictions in for the ' + raceName + ' race at http://motogp.tafasa.com.\n\nVisit http://www.motogp.com for latest results.\n\n\nSincerely,\nYour friends at PredictorGP', // plain text body
     //html: '' // html body
 	};
 
