@@ -26,6 +26,29 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   $scope.predictionRace = null
   $scope.scoreDialogElement = null
   $scope.adminUser = {}
+  $scope.contentLoaded = {
+    racesLoaded: false,
+    ridersLoaded: false,
+    scoresLoaded: false,
+    predictionsLoaded: false
+  }
+  $scope.loggingIn = false
+
+  $scope.checkLoggedIn = function() {
+
+    var loggedIn =
+      $scope.contentLoaded.racesLoaded &&
+      $scope.contentLoaded.ridersLoaded &&
+      $scope.contentLoaded.scoresLoaded &&
+      $scope.contentLoaded.predictionsLoaded
+
+    if (loggedIn) {
+      $scope.initialized = true
+      $scope.loggingIn = false
+      $scope.loggedIn = true
+    }
+
+  }
 
   $scope.checkExpired = function(date) {
   	var srcDate = Date.parse(date)
@@ -56,6 +79,8 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   }
 
   $scope.login = function() {
+    $scope.loggingIn = true
+
   	$http.post('/api/login',
   						 {
   						 	username: $scope.username,
@@ -77,11 +102,10 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   			$cookies.put('user_id', response.data._id, cookieOptions)
   			$cookies.put('user_name', response.data.name, cookieOptions)
 
-  			$scope.loggedIn = true
-
   			$scope.getData()
   		},
   		function error(response) {
+        $scope.loggingIn = false
   			$mdDialog.show(
           $mdDialog.alert()
             .parent(angular.element(document.body))
@@ -134,9 +158,14 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
 					}
 				}
 
+        $scope.contentLoaded.racesLoaded = true;
+        $scope.checkLoggedIn();
+
         $scope.getPredictions();
   		},
   		function error(response) {
+        $scope.contentLoaded.racesLoaded = true;
+        $scope.checkLoggedIn();
   	});
 
   	// Get all the riders
@@ -145,8 +174,13 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   						 null).then(
   		function success(response) {
   			$scope.riders = response.data
+
+        $scope.contentLoaded.ridersLoaded = true;
+        $scope.checkLoggedIn();
   		},
   		function error(response) {
+        $scope.contentLoaded.ridersLoaded = true;
+        $scope.checkLoggedIn();
   	});
 
 		// Get all the results
@@ -155,8 +189,13 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   						 null).then(
   		function success(response) {
   			$scope.scores = response.data
+
+        $scope.contentLoaded.scoresLoaded = true;
+        $scope.checkLoggedIn();
   		},
   		function error(response) {
+        $scope.contentLoaded.scoresLoaded = true;
+        $scope.checkLoggedIn();
   	});
 
     // Check the admin status
@@ -195,8 +234,13 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
             }
           }
         }
+
+        $scope.contentLoaded.predictionsLoaded = true;
+        $scope.checkLoggedIn();
       },
       function error(response) {
+        $scope.contentLoaded.predictionsLoaded = true;
+        $scope.checkLoggedIn();
     });
   }
 
@@ -359,11 +403,10 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
     }
 
   	if ($scope.user._id && $scope.user.name) {
-	  	$scope.loggedIn = true
-
-	  	$scope.getData()
-	  }
-	  $scope.initialized = true
+      $scope.getData()
+	  } else {
+      $scope.initialized = true
+    }
 	}
 
 }]);

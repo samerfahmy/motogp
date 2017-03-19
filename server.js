@@ -101,7 +101,7 @@ router.route("/api/login").post(function(req,res){
   var response = {}
   var User = require("./models/user").User
 
-  var username = req.body.username.toLowerCase()
+  var username = req.body.username ? req.body.username.toLowerCase() : null
   var password = req.body.password
 
   User.findOne({"username":username},function(err,data){
