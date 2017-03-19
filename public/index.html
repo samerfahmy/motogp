@@ -237,6 +237,17 @@
           </div>
         </md-content>
       </md-tab>
+      <md-tab label="Calendar">
+        <md-content layout-padding>
+          <div ng-repeat="race in races" md-whiteframe="1" layout-padding class="race-box">
+            <span class="md-title">{{race.location}}</span>
+            <br>
+            <span class="md-caption">Qualifying on {{race.qualifying_start_time_str}}</span>
+            <br>
+            <span class="md-caption">Race on {{race.race_start_time_str}}</span>
+          </div>
+        </md-content>
+      </md-tab>
       <md-tab label="Admin" ng-if="isAdmin">
         <md-content layout-padding>
           <center>
