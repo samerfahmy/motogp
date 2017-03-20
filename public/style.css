@@ -19,6 +19,12 @@ td {
 	margin-bottom: 12px;
 }
 
+.link {
+  color: #2979FF;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 table.score-table {
   table-layout: fixed;
   width: 100%;

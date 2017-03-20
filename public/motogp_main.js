@@ -129,8 +129,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   }
 
   $scope.submitUser = function() {
-    console.log($scope.adminUser);
-
     $http.post('/api/users',
                $scope.adminUser,
                null).then(
@@ -140,6 +138,10 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
       function error(response) {
         alert("There was a problem creating your password.\n\nPlease try again later.");
     });
+  }
+
+  $scope.showPoints = function() {
+    alert("These are the points awared:\n\n+ 1 point for predicting the correct pole position\n+ 1 point for predicting a rider who is on the podium\n+ 1 point for predicting a rider in their correct position\n");
   }
 
   $scope.getData = function() {
@@ -370,8 +372,6 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
 
       results.push(result)
     }
-
-    console.log(results.length)
 
     $http.post('/api/races/results',
                results,
