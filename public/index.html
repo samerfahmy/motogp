@@ -33,12 +33,14 @@
 
 <div ng-app="motogpApp" ng-controller="motogpCtrl" ng-cloak ng-init="init()">
 
-  <center>
-    <div ng-show="!loadedState.initialized">
-      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-      <span class="md-caption">Loading information... please wait.</span>
+  <div id="loading-indicator-wrapper" ng-show="!loadedState.initialized">
+    <div id="loading-indicator">
+      <center>
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        <span class="md-caption">Loading information... please wait.</span>
+      </center>
     </div>
-  </center>
+  </div>
 
   <md-content layout="column" id="login" ng-show="!loadedState.loggedIn && loadedState.initialized" layout-padding flex>
     <center>
@@ -88,9 +90,10 @@
           <div md-whiteframe="1" layout-padding class="race-box">
             <span class="md-title">{{predictionRace.location}}</span>
             <br>
-            <span class="md-caption">Qualifying on {{predictionRace.qualifying_start_time_str}}</span>
+            <span class="md-caption">Predict Pole by {{predictionRace.qualifying_start_time_str}}</span>
             <br>
-            <span class="md-caption">Race on {{predictionRace.race_start_time_str}}</span>
+            <span class="md-caption">Predict Race results by {{predictionRace.race_start_time_str}}</span>
+            <br><br>
             <table>
               <tr>
                 <td class="md-caption">Pole</td>

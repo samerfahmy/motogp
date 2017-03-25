@@ -57,3 +57,18 @@ table.score-table tr.total-row {
   color: #ffffff;
   font-weight: bold;
 }
+
+#loading-indicator-wrapper {
+  width: 100vw;
+  height: 100vh;
+  /*display: table;*/
+  position: relative;
+}
+
+#loading-indicator {
+  /*display: table-cell;
+  vertical-align: middle;*/
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+}
