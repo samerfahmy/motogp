@@ -235,7 +235,7 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
               race["selected_race_pos_3"] = prediction["race_pos_3"]
 
               var predictionRace = $scope.predictionRace
-              if (race["_id"] === predictionRace["_id"]) {
+              if (predictionRace && race["_id"] === predictionRace["_id"]) {
                 $scope.predictionRace = race
               }
             }
