@@ -1,6 +1,11 @@
 /* Switch to the db */
 //use motogp
 
+/* drop collections we want to recreate */
+db.predictions.drop()
+db.races.drop()
+db.riders.drop()
+
 /* Create the necessary collections */
 db.createCollection("predictions")
 db.createCollection("races")
