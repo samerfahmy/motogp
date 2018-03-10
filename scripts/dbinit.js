@@ -288,7 +288,7 @@ db.getCollection("riders").findAndModify({
 	query: { name : "Thomas Luthi" },
 	update: { $set :
 		{
-	    "name" : "Xavier Simeon",
+	    "name" : "Thomas Luthi",
     	"team" : "Marc VDS",
     	"manufacturer" : "Honda",
     	"number" : "12"
