@@ -55,10 +55,12 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
 
   }
 
-  $scope.checkExpired = function(date) {
-  	var srcDate = Date.parse(date)
-  	
-  	return srcDate <= Date.now()
+  $scope.checkExpired = function(date, offset = 0) {
+    var srcDate = Date.parse(date)
+    var srcDateModified = new Date(date)
+    srcDateModified.setSeconds(srcDateModified.getSeconds() + offset)
+
+    return srcDateModified <= Date.now()
   }
 
   $scope.checkForEmpty = function(src) {
@@ -160,8 +162,8 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
 					race["qualifying_start_time_str"] = qualifying_start_time_str
 					race["race_start_time_str"] = race_start_time_str
 
-					if ($scope.predictionRace == null && (!$scope.checkExpired(race["qualifying_start_time"]) || !$scope.checkExpired(race["race_start_time"]))) {
-						$scope.predictionRace = race
+					if ($scope.predictionRace == null && (!$scope.checkExpired(race["qualifying_start_time"]) || !$scope.checkExpired(race["race_start_time"], 86400))) {
+            $scope.predictionRace = race
 					}
 				}
 
