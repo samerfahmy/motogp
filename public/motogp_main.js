@@ -55,7 +55,11 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
 
   }
 
-  $scope.checkExpired = function(date, offset = 0) {
+  $scope.checkExpired = function(date, offset) {
+    if (offset === undefined) {
+      offset = 0
+    }
+
     var srcDate = Date.parse(date)
     var srcDateModified = new Date(date)
     srcDateModified.setSeconds(srcDateModified.getSeconds() + offset)
