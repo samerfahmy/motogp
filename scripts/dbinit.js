@@ -1,5 +1,5 @@
 /* Switch to the db */
-//use motogp
+// use motogp
 
 /* drop collections we want to recreate */
 db.predictions.drop()
@@ -18,8 +18,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Qatar Losail",
-	    "qualifying_start_time" : ISODate("2018-03-17T16:10:00.000Z"),
-	    "race_start_time" : ISODate("2018-03-18T16:00:00.000Z")
+	    "qualifying_start_time" : ISODate("2019-03-09T20:00:00+03:00"),
+	    "race_start_time" : ISODate("2019-03-10T20:00:00+03:00")
 		}
 	},
 	upsert: true
@@ -29,8 +29,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Argentina",
-	    "qualifying_start_time" : ISODate("2018-04-07T17:10:00.000Z"),
-			"race_start_time" : ISODate("2018-04-08T18:00:00.000Z")
+	    "qualifying_start_time" : ISODate("2019-03-30T14:10:00-03:00"),
+		"race_start_time" : ISODate("2019-03-31T15:00:00-03:00")
 		}
 	},
 	upsert: true
@@ -40,8 +40,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Austin",
-	    "qualifying_start_time" : ISODate("2018-04-21T14:10:00-05:00"),
-	    "race_start_time" : ISODate("2018-04-22T14:00:00-05:00")
+	    "qualifying_start_time" : ISODate("2019-04-13T14:10:00-05:00"),
+	    "race_start_time" : ISODate("2019-04-14T14:00:00-05:00")
 		}
 	},
 	upsert: true
@@ -51,8 +51,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Jerez Spain",
-	    "qualifying_start_time" : ISODate("2018-05-05T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2018-05-06T14:00:00+02:00")
+	    "qualifying_start_time" : ISODate("2019-05-04T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2019-05-05T14:00:00+02:00")
 		}
 	},
 	upsert: true
@@ -62,8 +62,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Le Mans France",
-	    "qualifying_start_time" : ISODate("2018-05-19T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2018-05-20T14:00:00+02:00")
+	    "qualifying_start_time" : ISODate("2019-05-18T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2019-05-19T14:00:00+02:00")
 		}
 	},
 	upsert: true
@@ -73,8 +73,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Mugello Italy",
-	    "qualifying_start_time" : ISODate("2018-06-02T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2018-06-03T14:00:00+02:00")
+	    "qualifying_start_time" : ISODate("2019-06-01T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2019-06-02T14:00:00+02:00")
 		}
 	},
 	upsert: true
@@ -84,8 +84,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Catalunya Spain",
-	    "qualifying_start_time" : ISODate("2018-06-16T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2018-06-17T14:00:00+02:00")
+	    "qualifying_start_time" : ISODate("2019-06-15T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2019-06-16T14:00:00+02:00")
 		}
 	},
 	upsert: true
@@ -95,8 +95,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Assen Netherlands",
-	    "qualifying_start_time" : ISODate("2018-06-30T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2018-07-01T14:00:00+02:00")
+	    "qualifying_start_time" : ISODate("2019-06-29T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2019-06-30T14:00:00+02:00")
 		}
 	},
 	upsert: true
@@ -106,8 +106,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Sachsenring Germany",
-	    "qualifying_start_time" : ISODate("2018-07-14T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2018-07-15T14:00:00+02:00")
+	    "qualifying_start_time" : ISODate("2019-07-06T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2019-07-07T14:00:00+02:00")
 		}
 	},
 	upsert: true
@@ -117,8 +117,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Brno Czech Republic",
-	    "qualifying_start_time" : ISODate("2018-08-04T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2018-08-05T14:00:00+02:00")
+	    "qualifying_start_time" : ISODate("2019-08-03T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2019-08-04T14:00:00+02:00")
 		}
 	},
 	upsert: true
@@ -128,8 +128,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Red Bull Ring Austria",
-	    "qualifying_start_time" : ISODate("2018-08-11T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2018-08-12T14:00:00+02:00")
+	    "qualifying_start_time" : ISODate("2019-08-10T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2019-08-11T14:00:00+02:00")
 		}
 	},
 	upsert: true
@@ -139,8 +139,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Silverstone Great Britain",
-	    "qualifying_start_time" : ISODate("2018-08-25T14:10:00+01:00"),
-	    "race_start_time" : ISODate("2018-08-26T14:00:00+01:00")
+	    "qualifying_start_time" : ISODate("2019-08-24T14:10:00+01:00"),
+	    "race_start_time" : ISODate("2019-08-25T14:00:00+01:00")
 		}
 	},
 	upsert: true
@@ -150,8 +150,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Misano Italy",
-	    "qualifying_start_time" : ISODate("2018-09-08T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2018-09-09T14:00:00+02:00")
+	    "qualifying_start_time" : ISODate("2019-09-14T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2019-09-15T14:00:00+02:00")
 		}
 	},
 	upsert: true
@@ -161,8 +161,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Aragon Spain",
-	    "qualifying_start_time" : ISODate("2018-09-22T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2018-09-23T14:00:00+02:00")
+	    "qualifying_start_time" : ISODate("2019-09-21T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2019-09-22T14:00:00+02:00")
 		}
 	},
 	upsert: true
@@ -172,8 +172,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Buriram Thailand",
-	    "qualifying_start_time" : ISODate("2018-10-06T14:10:00+07:00"),
-	    "race_start_time" : ISODate("2018-10-07T14:00:00+07:00")
+	    "qualifying_start_time" : ISODate("2019-10-05T14:10:00+07:00"),
+	    "race_start_time" : ISODate("2019-10-06T14:00:00+07:00")
 		}
 	},
 	upsert: true
@@ -183,8 +183,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Motegi Japan",
-	    "qualifying_start_time" : ISODate("2018-10-20T14:10:00+09:00"),
-	    "race_start_time" : ISODate("2018-10-21T14:00:00+09:00")
+	    "qualifying_start_time" : ISODate("2019-10-19T14:10:00+09:00"),
+	    "race_start_time" : ISODate("2019-10-20T14:00:00+09:00")
 		}
 	},
 	upsert: true
@@ -194,8 +194,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Phillip Island Australia",
-	    "qualifying_start_time" : ISODate("2018-10-27T15:10:00+11:00"),
-	    "race_start_time" : ISODate("2018-10-28T16:00:00+11:00")
+	    "qualifying_start_time" : ISODate("2019-10-26T15:10:00+11:00"),
+	    "race_start_time" : ISODate("2019-10-27T16:00:00+11:00")
 		}
 	},
 	upsert: true
@@ -205,8 +205,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Sepang Malaysia",
-	    "qualifying_start_time" : ISODate("2018-11-03T14:10:00+08:00"),
-	    "race_start_time" : ISODate("2018-11-04T15:00:00+08:00")
+	    "qualifying_start_time" : ISODate("2019-11-02T14:10:00+08:00"),
+	    "race_start_time" : ISODate("2019-11-03T15:00:00+08:00")
 		}
 	},
 	upsert: true
@@ -216,8 +216,8 @@ db.getCollection("races").findAndModify({
 	update: { $set :
 		{
 	    "location" : "Valencia Spain",
-	    "qualifying_start_time" : ISODate("2018-11-17T14:10:00+01:00"),
-	    "race_start_time" : ISODate("2018-11-18T14:00:00+01:00")
+	    "qualifying_start_time" : ISODate("2019-11-16T14:10:00+01:00"),
+	    "race_start_time" : ISODate("2019-11-17T14:00:00+01:00")
 		}
 	},
 	upsert: true
@@ -253,8 +253,8 @@ db.getCollection("riders").findAndModify({
 	update: { $set :
 		{
 	    "name" : "Johann Zarco",
-    	"team" : "Tech 3 Yamaha",
-    	"manufacturer" : "Yamaha",
+    	"team" : "KTM",
+    	"manufacturer" : "KTM",
     	"number" : "5"
 		}
 	},
@@ -265,33 +265,9 @@ db.getCollection("riders").findAndModify({
 	update: { $set :
 		{
 	    "name" : "Danilo Petrucci",
-    	"team" : "Alma Pramac Racing",
+    	"team" : "Ducati",
     	"manufacturer" : "Ducati",
     	"number" : "9"
-		}
-	},
-	upsert: true
-});
-db.getCollection("riders").findAndModify({
-	query: { name : "Xavier Simeon" },
-	update: { $set :
-		{
-	    "name" : "Xavier Simeon",
-    	"team" : "Avintia Ducati",
-    	"manufacturer" : "Ducati",
-    	"number" : "10"
-		}
-	},
-	upsert: true
-});
-db.getCollection("riders").findAndModify({
-	query: { name : "Thomas Luthi" },
-	update: { $set :
-		{
-	    "name" : "Thomas Luthi",
-    	"team" : "Marc VDS",
-    	"manufacturer" : "Honda",
-    	"number" : "12"
 		}
 	},
 	upsert: true
@@ -301,21 +277,9 @@ db.getCollection("riders").findAndModify({
 	update: { $set :
 		{
 	    "name" : "Karel Abraham",
-    	"team" : "Angel Nieto Team",
+    	"team" : "Reale Avintia Racing",
     	"manufacturer" : "Ducati",
     	"number" : "17"
-		}
-	},
-	upsert: true
-});
-db.getCollection("riders").findAndModify({
-	query: { name : "Alvaro Bautista" },
-	update: { $set :
-		{
-	    "name" : "Alvaro Bautista",
-    	"team" : "Angel Nieto Team",
-    	"manufacturer" : "Ducati",
-    	"number" : "19"
 		}
 	},
 	upsert: true
@@ -325,8 +289,8 @@ db.getCollection("riders").findAndModify({
 	update: { $set :
 		{
 	    "name" : "Franco Morbidelli",
-    	"team" : "Marc VDS",
-    	"manufacturer" : "Honda",
+    	"team" : "Petronas Yamaha",
+    	"manufacturer" : "Yamaha",
     	"number" : "21"
 		}
 	},
@@ -337,21 +301,9 @@ db.getCollection("riders").findAndModify({
 	update: { $set :
 		{
 	    "name" : "Maverick Vinales",
-    	"team" : "Movistar Yamaha",
+    	"team" : "Monster Yamaha",
     	"manufacturer" : "Yamaha",
-    	"number" : "25"
-		}
-	},
-	upsert: true
-});
-db.getCollection("riders").findAndModify({
-	query: { name : "Dani Pedrosa" },
-	update: { $set :
-		{
-	    "name" : "Dani Pedrosa",
-    	"team" : "Repsol Honda",
-    	"manufacturer" : "Honda",
-    	"number" : "26"
+    	"number" : "12"
 		}
 	},
 	upsert: true
@@ -361,8 +313,8 @@ db.getCollection("riders").findAndModify({
 	update: { $set :
 		{
 	    "name" : "Andrea Iannone",
-    	"team" : "Suzuki",
-    	"manufacturer" : "Suzuki",
+    	"team" : "Aprilia",
+    	"manufacturer" : "Aprilia",
     	"number" : "29"
 		}
 	},
@@ -388,18 +340,6 @@ db.getCollection("riders").findAndModify({
     	"team" : "LCR Honda",
     	"manufacturer" : "Honda",
     	"number" : "35"
-		}
-	},
-	upsert: true
-});
-db.getCollection("riders").findAndModify({
-	query: { name : "Bradley Smith" },
-	update: { $set :
-		{
-	    "name" : "Bradley Smith",
-    	"team" : "KTM",
-    	"manufacturer" : "KTM",
-    	"number" : "38"
 		}
 	},
 	upsert: true
@@ -453,23 +393,11 @@ db.getCollection("riders").findAndModify({
 	upsert: true
 });
 db.getCollection("riders").findAndModify({
-	query: { name : "Scott Redding" },
-	update: { $set :
-		{
-	    "name" : "Scott Redding",
-    	"team" : "Aprilia",
-    	"manufacturer" : "Aprilia",
-    	"number" : "45"
-		}
-	},
-	upsert: true
-});
-db.getCollection("riders").findAndModify({
 	query: { name : "Valentino Rossi" },
 	update: { $set :
 		{
 	    "name" : "Valentino Rossi",
-    	"team" : "Movistar Yamaha",
+    	"team" : "Monster Yamaha",
     	"manufacturer" : "Yamaha",
     	"number" : "46"
 		}
@@ -481,7 +409,7 @@ db.getCollection("riders").findAndModify({
 	update: { $set :
 		{
 	    "name" : "Tito Rabat",
-    	"team" : "Alma Pramac Racing",
+    	"team" : "Reale Avintia Racing",
     	"manufacturer" : "Ducati",
     	"number" : "53"
 		}
@@ -489,12 +417,12 @@ db.getCollection("riders").findAndModify({
 	upsert: true
 });
 db.getCollection("riders").findAndModify({
-	query: { name : "Hafizh Syahri" },
+	query: { name : "Hafizh Syahrin" },
 	update: { $set :
 		{
-	    "name" : "Hafizh Syahri",
-    	"team" : "Tech 3 Yamaha",
-    	"manufacturer" : "Yamaha",
+	    "name" : "Hafizh Syahrin",
+    	"team" : "Tech 3 KTM",
+    	"manufacturer" : "KTM",
     	"number" : "55"
 		}
 	},
@@ -505,9 +433,57 @@ db.getCollection("riders").findAndModify({
 	update: { $set :
 		{
 	    "name" : "Jorge Lorenzo",
-    	"team" : "Ducati",
-    	"manufacturer" : "Ducati",
+    	"team" : "Repsol Honda",
+    	"manufacturer" : "Honda",
     	"number" : "99"
+		}
+	},
+	upsert: true
+});
+db.getCollection("riders").findAndModify({
+	query: { name : "Fabio Quartararo" },
+	update: { $set :
+		{
+	    "name" : "Fabio Quartararo",
+    	"team" : "Petronas Yamaha",
+    	"manufacturer" : "Yamaha",
+    	"number" : "20"
+		}
+	},
+	upsert: true
+});
+db.getCollection("riders").findAndModify({
+	query: { name : "Joan Mir" },
+	update: { $set :
+		{
+	    "name" : "Joan Mir",
+    	"team" : "Suzuki",
+    	"manufacturer" : "Suzuki",
+    	"number" : "36"
+		}
+	},
+	upsert: true
+});
+db.getCollection("riders").findAndModify({
+	query: { name : "Francesco Bagnaia" },
+	update: { $set :
+		{
+	    "name" : "Francesco Bagnaia",
+    	"team" : "Alma Pramac Racing",
+    	"manufacturer" : "Ducati",
+    	"number" : "63"
+		}
+	},
+	upsert: true
+});
+db.getCollection("riders").findAndModify({
+	query: { name : "Miguel Oliveira" },
+	update: { $set :
+		{
+	    "name" : "Miguel Oliveira",
+    	"team" : "Tech 3 KTM",
+    	"manufacturer" : "KTM",
+    	"number" : "88"
 		}
 	},
 	upsert: true
