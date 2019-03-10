@@ -176,8 +176,35 @@
                 <td ng-repeat="user_id in scores.user_ids">{{scores.user_data[user_id].total}}</td>
             <tr>
             <tr ng-repeat="race in scores.races">
-              <td>{{race.location}}</td>
-              <td ng-repeat="user_id in scores.user_ids" ng-click="showScoreDialog($event, scores.user_data[user_id].name, race.location, scores.user_data[user_id].races[race.race_id], race)">{{scores.user_data[user_id].races[race.race_id] ? scores.user_data[user_id].races[race.race_id].score : 0}}</td>
+              <td>{{race.location}}
+                <div ng-if="showPredictions(race.location)">
+                  <p>
+                    <div ng-if="checkExpired(predictionRace.qualifying_start_time)">
+                      <span>Pole</span><br>
+                    </div>
+                    <div ng-if="checkExpired(predictionRace.race_start_time)">
+                      <span>1st</span><br>
+                      <span>2nd</span><br>
+                      <span>3rd</span><br>
+                    </div>
+                  </p>
+                </div>
+              </td>
+              <td ng-repeat="user_id in scores.user_ids" ng-click="showScoreDialog($event, scores.user_data[user_id].name, race.location, scores.user_data[user_id].races[race.race_id], race)">{{scores.user_data[user_id].races[race.race_id] ? scores.user_data[user_id].races[race.race_id].score : 0}}
+                <div ng-if="showPredictions(race.location)">
+                  <p>
+                    <div ng-if="checkExpired(predictionRace.qualifying_start_time)">
+                      <span>{{scores.user_data[user_id].races[race.race_id].pole}}</span><br>
+                    </div>
+                    <div ng-if="checkExpired(predictionRace.race_start_time)">
+                      <span>{{scores.user_data[user_id].races[race.race_id].race_pos_1}}</span><br>
+                      <span>{{scores.user_data[user_id].races[race.race_id].race_pos_2}}</span><br>
+                      <span>{{scores.user_data[user_id].races[race.race_id].race_pos_3}}</span><br>
+                      <br>
+                    </div>
+                  </p>
+                </div>
+              </td>
             </tr>
           </table>
 

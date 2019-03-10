@@ -89,6 +89,18 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
     });
   }
 
+  $scope.showPredictions = function(race_location) {
+    console.log("Checking if we should show predictions for " + race_location);
+    console.log("current race: " + $scope.predictionRace.location);
+    if (race_location == $scope.predictionRace.location) {
+      console.log("returning true");
+      return true;
+    }
+
+    console.log("returning false");
+    return false;
+  }
+
   $scope.login = function() {
     $scope.loadedState.loggingIn = true
 
