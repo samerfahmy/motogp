@@ -29,6 +29,10 @@ var RaceSchema = new mongoose.Schema({
   race_pos_3: {
     type: String,
     default: null
+  },
+  race_fastest_lap: {
+    type: String,
+    default: null
   }
 });
 

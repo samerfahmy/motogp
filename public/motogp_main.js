@@ -159,7 +159,7 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
   }
 
   $scope.showPoints = function() {
-    alert("These are the points awared:\n\n+ 1 point for predicting the correct pole position\n+ 1 point for predicting a rider who is on the podium\n+ 1 point for predicting a rider in their correct position\n");
+    alert("These are the points awared:\n\n+ 1 point for predicting the correct pole position\n+ 1 point for predicting a rider who is on the podium\n+ 1 point for predicting a rider in their correct position\n+ 1 point for predicting the rider with the fastest lap\n");
   }
 
   $scope.getData = function() {
@@ -251,6 +251,7 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
               race["selected_race_pos_1"] = prediction["race_pos_1"]
               race["selected_race_pos_2"] = prediction["race_pos_2"]
               race["selected_race_pos_3"] = prediction["race_pos_3"]
+              race["selected_race_fastest_lap"] = prediction["race_fastest_lap"]
 
               var predictionRace = $scope.predictionRace
               if (predictionRace && race["_id"] === predictionRace["_id"]) {
@@ -310,7 +311,8 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
 		if (!$scope.checkExpired(prediction["race_start_time"])) {
 			prediction.race_pos_1 = $scope.checkForEmpty($scope.predictionRace.selected_race_pos_1)
 			prediction.race_pos_2 = $scope.checkForEmpty($scope.predictionRace.selected_race_pos_2)
-			prediction.race_pos_3 = $scope.checkForEmpty($scope.predictionRace.selected_race_pos_3)
+      prediction.race_pos_3 = $scope.checkForEmpty($scope.predictionRace.selected_race_pos_3)
+      prediction.race_fastest_lap = $scope.checkForEmpty($scope.predictionRace.selected_race_fastest_lap)
 			prediction.entry_time = Date.now()
 		}
 
@@ -387,6 +389,7 @@ app.controller('motogpCtrl', ['$scope', '$http', '$mdToast', '$mdDialog', '$cook
       result.race_pos_1 = $scope.checkForEmpty(race.race_pos_1)
       result.race_pos_2 = $scope.checkForEmpty(race.race_pos_2)
       result.race_pos_3 = $scope.checkForEmpty(race.race_pos_3)
+      result.race_fastest_lap = $scope.checkForEmpty(race.race_fastest_lap)
 
       results.push(result)
     }

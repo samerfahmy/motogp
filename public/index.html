@@ -142,6 +142,18 @@
                   {{predictionRace.race_pos_3}}
                 </td>
               </tr>
+              <tr>
+                <td class="md-caption">Fastest Lap</td>
+                <td>
+                  <md-select name="riderSelect" ng-model="predictionRace.selected_race_fastest_lap" ng-disabled="checkExpired(predictionRace.race_start_time)">
+                    <md-option value=""></md-option>
+                    <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                  </md-select>
+                </td>
+                <td class="md-caption" ng-class="{green: predictionRace.race_fastest_lap === predictionRace.selected_race_fastest_lap, red: predictionRace.race_fastest_lap != predictionRace.selected_race_fastest_lap}">
+                  {{predictionRace.race_fastest_lap}}
+                </td>
+              </tr>
             </table>
             <br>
             <span class="md-caption">
@@ -293,6 +305,15 @@
                   {{race.race_pos_3}}
                 </td>
               </tr>
+              <tr>
+                <td class="md-caption">Fastest Lap</td>
+                <td>
+                  <span>{{race.selected_race_fastest_lap}}</span>
+                </td>
+                <td class="md-caption" ng-class="{green: race.race_fastest_lap === race.selected_race_fastest_lap, red: race.race_fastest_lap != race.selected_race_fastest_lap}">
+                  {{race.race_fastest_lap}}
+                </td>
+              </tr>
             </table>
             </div>
           </div>
@@ -344,6 +365,15 @@
                   <td class="md-caption">Third</td>
                   <td>
                     <md-select name="riderSelect" ng-model="race.race_pos_3">
+                      <md-option value=""></md-option>
+                      <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
+                    </md-select>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="md-caption">Fastest Lap</td>
+                  <td>
+                    <md-select name="riderSelect" ng-model="race.race_fastest_lap">
                       <md-option value=""></md-option>
                       <md-option ng-repeat="option in riders" value="{{option.name}}">{{option.name + ' [' + option.number + ']'}}</md-option>
                     </md-select>

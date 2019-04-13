@@ -18,6 +18,7 @@ var PredictionSchema = new mongoose.Schema({
   race_pos_1: String,
   race_pos_2: String,
   race_pos_3: String,
+  race_fastest_lap: String,
   qualifing_reminder: {
     type: Boolean,
     default: false

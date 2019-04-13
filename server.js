@@ -395,6 +395,7 @@ router.route("/api/users/:user_id/predictions").post(function(req,res){
         sanitizedPrediction.race_pos_1 = Utils.checkForEmpty(prediction.race_pos_1)
         sanitizedPrediction.race_pos_2 = Utils.checkForEmpty(prediction.race_pos_2)
         sanitizedPrediction.race_pos_3 = Utils.checkForEmpty(prediction.race_pos_3)
+        sanitizedPrediction.race_fastest_lap = Utils.checkForEmpty(prediction.race_fastest_lap)
         sanitizedPrediction.entry_time = Date.now()
       }
 
@@ -465,6 +466,7 @@ router.route("/api/scores").get(function(req,res){
         race_pos_1 : race.race_pos_1,
         race_pos_2 : race.race_pos_2,
         race_pos_3 : race.race_pos_3,
+        race_fastest_lap : race.race_fastest_lap,
         qualification_completed : race.pole != null,
         qualification_started : race.qualifying_start_time < now,
         race_completed : race.race_pos_1 != null,
@@ -527,6 +529,10 @@ router.route("/api/scores").get(function(req,res){
 
           if (winners[prediction.race_pos_3]) {
             calculated_score += prediction.race_pos_3 == race_result.race_pos_3 ? 2 : 1;
+          }
+
+          if (prediction.race_fastest_lap == race_result.race_fastest_lap) {
+            calculated_score += 1;
           }
         }
 
