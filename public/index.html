@@ -198,6 +198,7 @@
                       <span>1st</span><br>
                       <span>2nd</span><br>
                       <span>3rd</span><br>
+                      <span>Fastest Lap</span><br>
                     </div>
                   </p>
                 </div>
@@ -212,6 +213,7 @@
                       <span>{{scores.user_data[user_id].races[race.race_id].race_pos_1}}</span><br>
                       <span>{{scores.user_data[user_id].races[race.race_id].race_pos_2}}</span><br>
                       <span>{{scores.user_data[user_id].races[race.race_id].race_pos_3}}</span><br>
+                      <span>{{scores.user_data[user_id].races[race.race_id].race_fastest_lap}}</span><br>
                       <br>
                     </div>
                   </p>
@@ -232,12 +234,14 @@
                   <span>1st - {{scoreDialogElement.prediction.race_pos_1}}</span><br>
                   <span>2nd - {{scoreDialogElement.prediction.race_pos_2}}</span><br>
                   <span>3rd - {{scoreDialogElement.prediction.race_pos_3}}</span><br>
+                  <span>Fastest Lap - {{scoreDialogElement.prediction.race_fastest_lap}}</span><br>
                   <br>
                   <span>Results</span><br>
                   <span>Pole - {{scoreDialogElement.results.pole}}</span><br>
                   <span>1st - {{scoreDialogElement.results.race_pos_1}}</span><br>
                   <span>2nd - {{scoreDialogElement.results.race_pos_2}}</span><br>
                   <span>3rd - {{scoreDialogElement.results.race_pos_3}}</span><br>
+                  <span>Fastest Lap - {{scoreDialogElement.results.race_fastest_lap}}</span><br>
                 </p>
               </md-dialog>
             </div>
