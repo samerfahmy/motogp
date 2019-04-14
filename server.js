@@ -511,6 +511,7 @@ router.route("/api/scores").get(function(req,res){
           prediction_data.race_pos_1 = prediction.race_pos_1;
           prediction_data.race_pos_2 = prediction.race_pos_2;
           prediction_data.race_pos_3 = prediction.race_pos_3;
+          prediction_data.race_fastest_lap = prediction.race_fastest_lap;
         }
 
         if (race_result.race_completed) {
