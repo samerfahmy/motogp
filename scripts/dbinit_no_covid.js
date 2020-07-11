@@ -14,32 +14,131 @@ db.createCollection("users")
 
 /* Create the races documents */
 db.getCollection("races").findAndModify({
-	query: { location: "Jerez 1" },
+	query: { location: "Qatar Losail" },
 	update: { $set :
 		{
-	    "location" : "Jerez 1",
-	    "qualifying_start_time" : ISODate("2020-07-18T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2020-07-19T14:00:00+02:00")
+	    "location" : "Qatar Losail",
+	    "qualifying_start_time" : ISODate("2020-03-07T18:00:00+03:00"),
+	    "race_start_time" : ISODate("2020-03-08T18:00:00+03:00")
 		}
 	},
 	upsert: true
 });
 db.getCollection("races").findAndModify({
-	query: { location: "Jerez 2" },
+	query: { location: "Buriram Thailand" },
 	update: { $set :
 		{
-	    "location" : "Jerez 2",
-	    "qualifying_start_time" : ISODate("2020-07-25T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2020-07-26T14:00:00+02:00")
+	    "location" : "Buriram Thailand",
+	    "qualifying_start_time" : ISODate("2020-03-21T15:05:00+07:00"),
+	    "race_start_time" : ISODate("2020-03-22T15:00:00+07:00")
 		}
 	},
 	upsert: true
 });
 db.getCollection("races").findAndModify({
-	query: { location: "Czech" },
+	query: { location: "Austin" },
 	update: { $set :
 		{
-	    "location" : "Czech",
+	    "location" : "Austin",
+	    "qualifying_start_time" : ISODate("2020-04-04T14:10:00-05:00"),
+	    "race_start_time" : ISODate("2020-04-05T14:00:00-05:00")
+		}
+	},
+	upsert: true
+});
+db.getCollection("races").findAndModify({
+	query: { location: "Argentina" },
+	update: { $set :
+		{
+	    "location" : "Argentina",
+	    "qualifying_start_time" : ISODate("2020-04-18T14:10:00-03:00"),
+		"race_start_time" : ISODate("2020-04-19T14:00:00-03:00")
+		}
+	},
+	upsert: true
+})
+db.getCollection("races").findAndModify({
+	query: { location: "Jerez Spain" },
+	update: { $set :
+		{
+	    "location" : "Jerez Spain",
+	    "qualifying_start_time" : ISODate("2020-05-02T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2020-05-03T14:00:00+02:00")
+		}
+	},
+	upsert: true
+});
+db.getCollection("races").findAndModify({
+	query: { location: "Le Mans France" },
+	update: { $set :
+		{
+	    "location" : "Le Mans France",
+	    "qualifying_start_time" : ISODate("2020-05-16T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2020-05-17T14:00:00+02:00")
+		}
+	},
+	upsert: true
+});
+db.getCollection("races").findAndModify({
+	query: { location: "Mugello Italy" },
+	update: { $set :
+		{
+	    "location" : "Mugello Italy",
+	    "qualifying_start_time" : ISODate("2020-05-30T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2020-05-31T14:00:00+02:00")
+		}
+	},
+	upsert: true
+});
+db.getCollection("races").findAndModify({
+	query: { location: "Catalunya Spain" },
+	update: { $set :
+		{
+	    "location" : "Catalunya Spain",
+	    "qualifying_start_time" : ISODate("2020-06-06T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2020-06-07T14:30:00+02:00")
+		}
+	},
+	upsert: true
+});
+db.getCollection("races").findAndModify({
+	query: { location: "Sachsenring Germany" },
+	update: { $set :
+		{
+	    "location" : "Sachsenring Germany",
+	    "qualifying_start_time" : ISODate("2020-06-20T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2020-06-21T14:00:00+02:00")
+		}
+	},
+	upsert: true
+});
+db.getCollection("races").findAndModify({
+	query: { location: "Assen Netherlands" },
+	update: { $set :
+		{
+	    "location" : "Assen Netherlands",
+	    "qualifying_start_time" : ISODate("2020-06-27T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2020-06-28T14:00:00+02:00")
+		}
+	},
+	upsert: true
+});
+db.getCollection("races").findAndModify({
+	query: { location: "Finland" },
+	update: { $set :
+		{
+	    "location" : "Finland",
+	    "qualifying_start_time" : ISODate("2020-07-11T15:10:00+03:00"),
+	    "race_start_time" : ISODate("2020-07-12T15:00:00+03:00")
+		}
+	},
+	upsert: true
+});
+db.getCollection("races").findAndModify({
+	query: { location: "Brno Czech Republic" },
+	update: { $set :
+		{
+	    "location" : "Brno Czech Republic",
 	    "qualifying_start_time" : ISODate("2020-08-08T14:10:00+02:00"),
 	    "race_start_time" : ISODate("2020-08-09T14:00:00+02:00")
 		}
@@ -47,10 +146,10 @@ db.getCollection("races").findAndModify({
 	upsert: true
 });
 db.getCollection("races").findAndModify({
-	query: { location: "Austria 1" },
+	query: { location: "Red Bull Ring Austria" },
 	update: { $set :
 		{
-	    "location" : "Austria 1",
+	    "location" : "Red Bull Ring Austria",
 	    "qualifying_start_time" : ISODate("2020-08-15T14:10:00+02:00"),
 	    "race_start_time" : ISODate("2020-08-16T14:00:00+02:00")
 		}
@@ -58,21 +157,21 @@ db.getCollection("races").findAndModify({
 	upsert: true
 });
 db.getCollection("races").findAndModify({
-	query: { location: "Austria 2" },
+	query: { location: "Silverstone Great Britain" },
 	update: { $set :
 		{
-	    "location" : "Austria 2",
-	    "qualifying_start_time" : ISODate("2020-08-22T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2020-08-23T14:00:00+02:00")
+	    "location" : "Silverstone Great Britain",
+	    "qualifying_start_time" : ISODate("2020-08-29T14:10:00+01:00"),
+	    "race_start_time" : ISODate("2020-08-30T13:00:00+01:00")
 		}
 	},
 	upsert: true
 });
 db.getCollection("races").findAndModify({
-	query: { location: "Misano 1" },
+	query: { location: "Misano Italy" },
 	update: { $set :
 		{
-	    "location" : "Misano 1",
+	    "location" : "Misano Italy",
 	    "qualifying_start_time" : ISODate("2020-09-12T14:10:00+02:00"),
 	    "race_start_time" : ISODate("2020-09-13T14:00:00+02:00")
 		}
@@ -80,78 +179,56 @@ db.getCollection("races").findAndModify({
 	upsert: true
 });
 db.getCollection("races").findAndModify({
-	query: { location: "Misano 2" },
+	query: { location: "Aragon Spain" },
 	update: { $set :
 		{
-	    "location" : "Misano 2",
-	    "qualifying_start_time" : ISODate("2020-09-19T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2020-09-20T14:00:00+02:00")
+	    "location" : "Aragon Spain",
+	    "qualifying_start_time" : ISODate("2020-10-03T14:10:00+02:00"),
+	    "race_start_time" : ISODate("2020-10-04T14:00:00+02:00")
 		}
 	},
 	upsert: true
 });
 db.getCollection("races").findAndModify({
-	query: { location: "Barcelona" },
+	query: { location: "Motegi Japan" },
 	update: { $set :
 		{
-	    "location" : "Barcelona",
-	    "qualifying_start_time" : ISODate("2020-09-26T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2020-09-27T14:00:00+02:00")
+	    "location" : "Motegi Japan",
+	    "qualifying_start_time" : ISODate("2020-10-17T14:10:00+09:00"),
+	    "race_start_time" : ISODate("2020-10-18T14:00:00+09:00")
 		}
 	},
 	upsert: true
 });
 db.getCollection("races").findAndModify({
-	query: { location: "France" },
+	query: { location: "Phillip Island Australia" },
 	update: { $set :
 		{
-	    "location" : "France",
-	    "qualifying_start_time" : ISODate("2020-10-10T14:10:00+00:00"),
-	    "race_start_time" : ISODate("2020-10-11T14:00:00+00:00")
+	    "location" : "Phillip Island Australia",
+	    "qualifying_start_time" : ISODate("2020-10-24T14:10:00+11:00"),
+	    "race_start_time" : ISODate("2020-10-25T15:00:00+11:00")
 		}
 	},
 	upsert: true
 });
 db.getCollection("races").findAndModify({
-	query: { location: "Aragon 1" },
+	query: { location: "Sepang Malaysia" },
 	update: { $set :
 		{
-	    "location" : "Aragon 1",
-	    "qualifying_start_time" : ISODate("2020-10-17T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2020-10-18T14:00:00+02:00")
+	    "location" : "Sepang Malaysia",
+	    "qualifying_start_time" : ISODate("2020-10-31T14:10:00+08:00"),
+	    "race_start_time" : ISODate("2020-11-01T15:00:00+08:00")
 		}
 	},
 	upsert: true
 });
 db.getCollection("races").findAndModify({
-	query: { location: "Aragon 2" },
+	query: { location: "Valencia Spain" },
 	update: { $set :
 		{
-	    "location" : "Aragon 2",
-	    "qualifying_start_time" : ISODate("2020-10-24T14:10:00+02:00"),
-	    "race_start_time" : ISODate("2020-10-25T14:00:00+02:00")
-		}
-	},
-	upsert: true
-});
-db.getCollection("races").findAndModify({
-	query: { location: "Valencia 1" },
-	update: { $set :
-		{
-	    "location" : "Valencia 1",
-	    "qualifying_start_time" : ISODate("2020-11-07T14:10:00+01:00"),
-	    "race_start_time" : ISODate("2020-11-08T14:00:00+01:00")
-		}
-	},
-	upsert: true
-});
-db.getCollection("races").findAndModify({
-	query: { location: "Valencia 2" },
-	update: { $set :
-		{
-	    "location" : "Valencia 2",
-	    "qualifying_start_time" : ISODate("2020-11-14T14:10:00+01:00"),
-	    "race_start_time" : ISODate("2020-11-15T14:00:00+01:00")
+	    "location" : "Valencia Spain",
+	    "qualifying_start_time" : ISODate("2020-11-14T14:10:00+00:00"),
+	    "race_start_time" : ISODate("2020-11-15T14:00:00+00:00")
 		}
 	},
 	upsert: true
