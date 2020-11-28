@@ -156,6 +156,17 @@ db.getCollection("races").findAndModify({
 	},
 	upsert: true
 });
+db.getCollection("races").findAndModify({
+	query: { location: "Portimao" },
+	update: { $set :
+		{
+	    "location" : "Portimao",
+	    "qualifying_start_time" : ISODate("2020-11-21T14:10:00+00:00"),
+	    "race_start_time" : ISODate("2020-11-22T14:00:00+00:00")
+		}
+	},
+	upsert: true
+});
 
 /* Create the riders documents */
 db.getCollection("riders").findAndModify({
