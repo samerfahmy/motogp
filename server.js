@@ -7,7 +7,8 @@ const mongoose      = require("mongoose")
 const async         = require("async")
 const mailer        = require("./mailer")
 
-const DATABASE_PROD   = "mongodb://samer:SUXhfyuLNFrSfmsU@ds129010.mlab.com:29010/motogp"
+//const DATABASE_PROD   = "mongodb://samer:SUXhfyuLNFrSfmsU@ds129010.mlab.com:29010/motogp"
+const DATABASE_PROD   = "mongodb://samer:SUXhfyuLNFrSfmsU@cluster0-shard-00-00.papkt.mongodb.net:27017,cluster0-shard-00-01.papkt.mongodb.net:27017,cluster0-shard-00-02.papkt.mongodb.net:27017/motogp?ssl=true&replicaSet=atlas-orosfc-shard-0&authSource=admin&retryWrites=true&w=majority"
 const DATABASE_LOCAL  = "mongodb://localhost:27017/motogp"
 
 /* Load config settings */
@@ -75,7 +76,7 @@ router.use(myLogger)
 
 
 /* Open database */
-mongoose.connect(DATABASE);
+mongoose.connect(DATABASE).catch(error => console.log("error: " + error));
 
 /* Status check endpoint */
 router.route("/api/_status").get(function(req,res){
